@@ -6,7 +6,7 @@ export default function EventFilters({
   locationFilterValue,
   dateFromFilterValue,
   dateToFilterValue,
-  showStaredEvents,
+  showStarredEvents,
   toggleShowStarredEvents,
   setLocationFilterValue,
   setDateFromFilterValue,
@@ -49,7 +49,7 @@ export default function EventFilters({
           onChange={onDateToFilterChange}
         />
       </div>
-      <a onClick={toggleShowStarredEvents}>{showStaredEvents ? 'hide' : 'show'} stared</a>
+      <a onClick={toggleShowStarredEvents}>{showStarredEvents ? 'hide' : 'show'} starred</a>
     </div>
   );
 }

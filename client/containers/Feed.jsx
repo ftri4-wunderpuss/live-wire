@@ -26,16 +26,16 @@ export default function Feed({
   // TODO consider what value html date fields take and what this initial value should be
   const [dateFromFilterValue, setDateFromFilterValue] = useState('');
   const [dateToFilterValue, setDateToFilterValue] = useState('');
-  const [showStarredEvents, setShowStarredEvents] = useState(true);
+  const [showStarredEventsFirst, setShowStarredEventsFirst] = useState(true);
 
   /* ACTIONS */
 
   const toggleShowStarredEvents = useCallback(() => {
-    setShowStarredEvents(showStaredEvents => !showStaredEvents);
-  }, [setShowStarredEvents]);
+    setShowStarredEventsFirst(showStarredEvents => !showStarredEvents);
+  }, [setShowStarredEventsFirst]);
 
   const toggleIsStarred = useCallback(eventId => {
-    if (starredEvents.find(evenId)) {
+    if (starredEvents.find(eventId)) {
       // event is currently starred
       removeEvent(eventId);
     } else {
@@ -59,7 +59,7 @@ export default function Feed({
         locationFilterValue={locationFilterValue}
         dateFromFilterValue={dateFromFilterValue}
         dateToFilterValue={dateToFilterValue}
-        showStaredEvents={showStarredEvents}
+        showStarredEvents={showStarredEventsFirst}
         toggleShowStarredEvents={toggleShowStarredEvents}
         setLocationFilterValue={setLocationFilterValue}
         setDateFromFilterValue={setDateFromFilterValue}
@@ -80,7 +80,7 @@ export default function Feed({
             venue={eventInfo.venue}
             date={eventInfo.date}
             ticketPrice={eventInfo.ticketPrice.toFixed(2)}
-            isStarred={starredEvents.find(eventInfo.evenId) !== undefined}
+            isStarred={starredEvents.find(eventInfo.eventId) !== undefined}
             removeArtist={() => {
               if (eventInfo.artists.length === 1) removeArtist(eventInfo.artists[0].artistId);
             }}
