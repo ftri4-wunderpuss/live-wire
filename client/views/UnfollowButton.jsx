@@ -8,6 +8,7 @@ export default function UnfollowButton({
 }) {
   return (
     <button
+      className='unfollow-button'
       type='button'
       onClick={onClick}
     >
