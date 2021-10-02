@@ -1,4 +1,4 @@
-# Team Wunderpuss Scratch Project - CodeSmith FTRI4
+# Team Wunderpus Scratch Project - CodeSmith FTRI4
 
 ![](./client/assets/images/wonderpus-group-photo.png)
 
