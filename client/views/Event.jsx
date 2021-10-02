@@ -1,20 +1,23 @@
 import React from 'react';
 
 import './../sass/views/Event.scss';
-import removeIconUrl from './../assets/icons/remove_circle_outline_black_24dp.svg';
+
+import UnfollowButton from './UnfollowButton';
 
 export default function Event({
+  hasMultipleArtist,
   artistName,
   eventImageUrl,
   venue,
   date,
   ticketPrice,
   isStarred,
-  removeArtist
+  removeArtist,
+  toggleIsStarred
 }) {
   return (
     <article className='event-item'>
-      <div className='event-star'>
+      <div className='event-star' onClick={toggleIsStarred}>
         <span className={isStarred ? 'active-star' : ''}>&#9733;</span>
       </div>
       <header>
@@ -31,14 +34,11 @@ export default function Event({
           <li>Ticket Price: {ticketPrice} USD</li>
         </ul>
       </div>
-      <div className='event-footer'>
-        <button
-          type='button'
-          onClick={removeArtist}
-        >
-          Unfollow <img src={removeIconUrl} alt='remove artist icon' />
-        </button>
-      </div>
+      {!hasMultipleArtist &&
+        <div className='event-footer'>
+          <UnfollowButton onClick={removeArtist} />
+        </div>
+      }
     </article>
   );
 }
