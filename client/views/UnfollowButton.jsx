@@ -1,6 +1,6 @@
-import { render } from 'node-sass';
 import React from 'react';
 
+import './../sass/views/UnfollowButton.scss';
 import removeIconUrl from './../assets/icons/remove_circle_outline_black_24dp.svg';
 
 export default function UnfollowButton({
@@ -9,7 +9,7 @@ export default function UnfollowButton({
   return (
     <button
       type='button'
-      onClick={removeArtist}
+      onClick={onClick}
     >
       Unfollow <img src={removeIconUrl} alt='remove artist icon' />
     </button>
