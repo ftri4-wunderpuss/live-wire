@@ -27,6 +27,7 @@
   "homepage": "https://github.com/ftri4-wunderpuss/scratch-project#readme",
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.1",
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

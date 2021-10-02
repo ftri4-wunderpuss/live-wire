@@ -3,9 +3,13 @@ const express = require('express');
 const app = express();
 
 const apiRouter = require('./routes/api');
+const userRouter = require('./routes/user');
+
 const PORT = 3000;
 
 // app.use('/api', apiRouter)
+app.use('/user', userRouter)
+
 
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
