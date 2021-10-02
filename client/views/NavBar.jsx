@@ -11,7 +11,7 @@ export default function NavBar({
   }, [setSearchValue]);
 
   return (
-    <div id='guest-nav-bar'>
+    <div id='nav-bar'>
       <img alt='page logo' />
       <input type='text' required minLength='1' size='30' value={searchValue} onChange={onChange} />
       <nav>
