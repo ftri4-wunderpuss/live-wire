@@ -32,6 +32,11 @@
       "jest": true,
       "browser": true
     },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
     "parserOptions": {
       "sourceType": "module",
       "ecmaFeatures": {
