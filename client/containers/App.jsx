@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 
 import LandingPage from '../views/LandingPage.jsx';
@@ -7,7 +6,10 @@ import Feed from './Feed.jsx';
 import Search from './Search.jsx';
 import Account from './../views/Account.jsx';
 import LoginModal from '../modals/LoginModal.jsx';
+import SignUpModal from './../modals/SignUpModal.jsx';
+
 import useModal from '../hooks/useModal.js';
+
 import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
 
 /**
@@ -26,10 +28,30 @@ export default function App() {
 
   // globally controlled components
   const [searchValue, setSearchValue] = useState('');
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignUpModal, openSignUpModal, closeSignUpModal] = useModal(false);
+
+  const [isOpenLoginModal, openLoginModal, closeLoginModal] = useModal(false);
+  const [loginModalError, setLoginModalError] = useState('');
+
+  const [isOpenSignUpModal, openSignUpModal, closeSignUpModal] = useModal(false);
+  const [signupModalError, setSignupModalError] = useState('');
+
 
   /* ACTIONS */
+
+  // login/signup actions
+  const handleLoginRequest = useCallback((email, password) => {
+    // TODO handle AJAX login
+
+    console.log({ email, password });
+    closeLoginModal();
+  }, [closeLoginModal]);
+
+  const handleRegisterUser = useCallback((...args) => {
+    // TODO handle AJAX login
+
+    console.log({ args });
+    closeSignUpModal();
+  }, [closeSignUpModal]);
 
   // artist list
   const addArtist = useCallback(artist => {
@@ -75,10 +97,6 @@ export default function App() {
     });
   }, []);
 
-  // landing page
-
- 
-
 
   /* SIDE EFFECTS */
 
@@ -92,15 +110,18 @@ export default function App() {
           openLoginModal={openLoginModal}
           openSignUpModal={openSignUpModal}
         />
-        {showLoginModal && <LoginModal
-          isOpen={showLoginModal}
-          setIsOpen={setShowLoginModal}
-        />}
-        {showSignUpModal && <SignUpModal
-          isOpen={showSignUpModal}
+        <LoginModal
+          isOpen={isOpenLoginModal}
+          closeModal={closeLoginModal}
+          errorMessage={loginModalError}
+          handleLoginRequest={handleLoginRequest}
+        />
+        <SignUpModal
+          isOpen={isOpenSignUpModal}
           closeModal={closeSignUpModal}
+          errorMessage={signupModalError}
           handleRegisterUser={handleRegisterUser}
-          />}
+        />
       </Route>
       <Route path="/feed">
         {user
