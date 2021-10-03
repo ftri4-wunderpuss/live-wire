@@ -6,7 +6,7 @@ import LandingPage from '../views/LandingPage.jsx';
 import Feed from './Feed.jsx';
 import Search from './Search.jsx';
 import Account from './../views/Account.jsx';
-import LoginModal from '../views/LoginModal.jsx';
+import LoginModal from '../modals/LoginModal.jsx';
 
 import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
 
