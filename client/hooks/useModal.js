@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
  * Custom hook to control a MUI modal.
  * @returns `[isOpen, handleOpen, handleClose]`
  */
-export default function useModal(initialIsOpen) {
+export default function useModal(initialIsOpen = false) {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
 
   // modal actions

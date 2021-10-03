@@ -9,6 +9,7 @@ import Account from './../views/Account.jsx';
 import LoginModal from '../modals/LoginModal.jsx';
 
 import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
+import useModal from '../hooks/useModal.js';
 
 /**
  * Stateful component. App maintains user, settings, followedArtists, starredEvents, and searchValue state.
@@ -26,10 +27,20 @@ export default function App() {
 
   // globally controlled components
   const [searchValue, setSearchValue] = useState('');
-  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const [isOpenLoginModal, openLoginModal, closeLoginModal] = useModal(false);
+  const [loginModalError, setLoginModalError] = useState('');
 
 
   /* ACTIONS */
+
+  // login/signup actions
+  const handleLoginRequest = useCallback((email, password) => {
+    // TODO handle AJAX login
+
+    console.log({ email, password });
+    closeLoginModal();
+  }, [closeLoginModal]);
 
   // artist list
   const addArtist = useCallback(artist => {
@@ -75,11 +86,6 @@ export default function App() {
     });
   }, []);
 
-  // landing page
-  const openLoginModal = useCallback(() => {
-    setShowLoginModal(true);
-  }, []);
-
 
   /* SIDE EFFECTS */
 
@@ -92,10 +98,12 @@ export default function App() {
         <LandingPage
           openLoginModal={openLoginModal}
         />
-        {showLoginModal && <LoginModal
-          isOpen={showLoginModal}
-          setIsOpen={setShowLoginModal}
-        />}
+        <LoginModal
+          isOpen={isOpenLoginModal}
+          closeModal={closeLoginModal}
+          errorMessage={loginModalError}
+          handleLoginRequest={handleLoginRequest}
+        />
       </Route>
       <Route path="/feed">
         {user
