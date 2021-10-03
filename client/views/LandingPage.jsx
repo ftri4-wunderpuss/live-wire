@@ -1,18 +1,17 @@
 import React from 'react';
-import GuestNavBar from './GuestNavBar.jsx'
+
 import './../sass/views/LandingPage.scss';
 
+import GuestNavBar from './GuestNavBar.jsx';
+
 export default function LandingPage() {
-  
   return (
     <div id="landing-page">
-      <GuestNavBar/>
+      <GuestNavBar />
       <div id="promo-text">
+        {/* TODO add promo text */}
         <p> TODO: PROMO TEXT </p>
       </div>
     </div>
-  ); 
-
-};  
-
-
+  );
+}
