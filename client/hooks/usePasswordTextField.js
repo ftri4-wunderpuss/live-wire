@@ -12,10 +12,10 @@ export default function usePasswordTextField(initialValue = '') {
     setPassword(event.target.value);
   }, []);
 
-  const handleClickShowPassword = event => {
+  const handleClickShowPassword = useCallback(event => {
     setShowPassword(state => !state);
     event.preventDefault();
-  };
+  }, []);
 
   return [password, showPassword, onPasswordChange, handleClickShowPassword];
 }
