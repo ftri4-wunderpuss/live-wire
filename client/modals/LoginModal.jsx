@@ -92,7 +92,6 @@ export default function LoginModal({
               <InputLabel htmlFor="password-field">Password</InputLabel>
               <Input
                 id="password-field"
-                label="Password"
                 variant="standard"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
