@@ -44,9 +44,6 @@ export default function SignUpModal ({
           at least one number \n
           and be at least 6 characters long` 
         );
-      // should contain at least one lower case
-        // should contain at least one digit
-        // Must be at least 6 characters in length);
     return handleRegisterUser(name, email, password1);
   }, [email, handleRegisterUser, name, password1, password2]);
 
