@@ -88,6 +88,8 @@ export default function Settings({
     }
 
     // TODO send AJAX request
+
+    setIsEditingPassword(false);
   }, [passwordFieldValue]);
 
   // city input field
@@ -106,6 +108,8 @@ export default function Settings({
     }));
 
     // TODO send AJAX request
+
+    setIsEditingCity(false);
   }, [cityFieldValue, setSettings]);
 
   // email notification toggle
