@@ -20,4 +20,4 @@ An app that collects and maintains a curated list of upcoming concert by your fo
 
 # Tech Stack
 
-[React](https://reactjs.org/), [React Router](https://reactrouter.com/), [Material.io](https://material.io/), [Express](http://expressjs.com/), [PostgreSQL](https://www.postgresql.org/), [Webpack](https://webpack.js.org/)
+[React](https://reactjs.org/), [React Router](https://reactrouter.com/), [MUI](https://mui.com/), [Express](http://expressjs.com/), [PostgreSQL](https://www.postgresql.org/), [Webpack](https://webpack.js.org/)
