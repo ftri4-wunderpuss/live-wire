@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { createTheme } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/system';
-
 import 'normalize.css';
 import './sass/shared.scss';
 
-import Test from './Test.jsx';
+import { HashRouter } from "react-router-dom";
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/system';
+
+
+import App from './containers/App.jsx';
 
 const theme = createTheme({
   palette: {
@@ -16,8 +18,10 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <Test />
-  </ThemeProvider>,
+  <HashRouter >
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
+  </HashRouter>,
   document.getElementById('root')
 );
