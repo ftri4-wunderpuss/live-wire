@@ -128,7 +128,7 @@ export default function Settings({
     <div id='settings'>
       <div id='account-settings'>
         <ul>
-          {!isEditingName && <li>{user.name} <EditButton onClick={() => isEditingName(true)} /></li>}
+          {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
           {isEditingName && <li>
             <SettingEditField
               value={nameFieldValue}
