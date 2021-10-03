@@ -40,7 +40,7 @@ export default function Settings({
   // name input field
   const handleNameValueChange = useCallback(event => {
     setNameFieldValue(event.target.value);
-  }, [setNameFieldValue]);
+  }, []);
 
   const handleNameSave = useCallback(() => {
     if (!isValidName(nameFieldValue)) {
