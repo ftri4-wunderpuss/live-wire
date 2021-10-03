@@ -63,4 +63,15 @@ userController.verifyUser = async (req, res, next) => {
 }
 
 
+/**
+ * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events.
+ */
+userController.getUserInfo = async(req, res, next) {
+  //userModel.getUser()
+  //userModel.getSettings()
+  //userModel.getFollowedArtists
+  //userModel.getStarredEvents
+}
+
+
 module.exports = userController;

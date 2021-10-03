@@ -1,4 +1,5 @@
 const path = require("path");
+const autoprefixer = require('autoprefixer');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -38,7 +39,33 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  autoprefixer()
+                ]
+              }
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: ['./node_modules']
+              },
+              // Prefer Dart Sass
+              implementation: require('sass'),
+
+              // See https://github.com/webpack-contrib/sass-loader/issues/804
+              webpackImporter: false,
+            }
+          },
+        ],
       },
       {
         test: /\.css$/i,
@@ -69,8 +96,8 @@ module.exports = {
   devServer: {
     publicPath: '/',
     proxy: {
-      '/login': { target: 'https://localhost:3000', secure: false },
-      '/api': { target: 'https://localhost:3000', secure: false },
+      '/login': { target: 'http://localhost:3000' },
+      '/api': { target: 'http://localhost:3000' },
     },
     hot: true,
   }
