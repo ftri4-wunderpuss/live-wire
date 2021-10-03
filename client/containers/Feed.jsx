@@ -42,7 +42,7 @@ export default function Feed({
     } else {
       addEvent(eventId);
     }
-  }, [addEvent, removeEvent]);
+  }, [addEvent, removeEvent, starredEvents]);
 
   /* SIDE EFFECTS */
 

@@ -115,29 +115,17 @@ export default function App() {
   /* RENDER */
 
   return (
-    <Switch>
-      <Route exact path="/">
-        <LandingPage
-          openLoginModal={openLoginModal}
-          openSignUpModal={openSignUpModal}
-        />
-        <LoginModal
-          isOpen={isOpenLoginModal}
-          closeModal={closeLoginModal}
-          errorMessage={loginModalError}
-          handleLoginRequest={handleLoginRequest}
-        />
-        <SignUpModal
-          isOpen={isOpenSignUpModal}
-          closeModal={closeSignUpModal}
-          errorMessage={signupModalError}
-          handleRegisterUser={handleRegisterUser}
-        />
-      </Route>
-      <Route path="/feed">
-        {user
-          ? <>
-            <Feed
+    <>
+      <Switch>
+        <Route exact path="/">
+          <LandingPage
+            openLoginModal={openLoginModal}
+            openSignUpModal={openSignUpModal}
+          />
+        </Route>
+        <Route path="/feed">
+          {user
+            ? <Feed
               starredEvents={starredEvents}
               searchValue={searchValue}
               setSearchValue={setSearchValue}
@@ -146,18 +134,11 @@ export default function App() {
               removeEvent={removeEvent}
               openLogoutModal={openLogoutModal}
             />
-            <LogoutModal
-              isOpen={isOpenLogoutModal}
-              closeModal={closeLogoutModal}
-              handleLogoutRequest={handleLogoutRequest}
-            />
-          </>
-          : <Redirect to="/" />}
-      </Route>
-      <Route path="/search">
-        {user
-          ? <>
-            <Search
+            : <Redirect to="/" />}
+        </Route>
+        <Route path="/search">
+          {!user
+            ? <Search
               followedArtists={followedArtists}
               searchValue={searchValue}
               setSearchValue={setSearchValue}
@@ -165,18 +146,11 @@ export default function App() {
               removeArtist={removeArtist}
               openLogoutModal={openLogoutModal}
             />
-            <LogoutModal
-              isOpen={isOpenLogoutModal}
-              closeModal={closeLogoutModal}
-              handleLogoutRequest={handleLogoutRequest}
-            />
-          </>
-          : <Redirect to="/" />}
-      </Route>
-      <Route path="/account">
-        {user
-          ? <>
-            <Account
+            : <Redirect to="/" />}
+        </Route>
+        <Route path="/account">
+          {user
+            ? <Account
               searchValue={searchValue}
               setSearchValue={setSearchValue}
               user={user}
@@ -187,19 +161,32 @@ export default function App() {
               removeArtist={removeArtist}
               openLogoutModal={openLogoutModal}
             />
-            <LogoutModal
-              isOpen={isOpenLogoutModal}
-              closeModal={closeLogoutModal}
-              handleLogoutRequest={handleLogoutRequest}
-            />
-          </>
-          : <Redirect to="/" />}
-      </Route>
-      <Route>
-        {/* TODO 404 page */}
-        <h1>Front-End 404</h1>
-        <Link to="/">Go Back</Link>
-      </Route>
-    </Switch>
+            : <Redirect to="/" />}
+        </Route>
+        <Route>
+          {/* TODO 404 page */}
+          <h1>Front-End 404</h1>
+          <Link to="/">Go Back</Link>
+        </Route>
+      </Switch>
+
+      <LoginModal
+        isOpen={isOpenLoginModal}
+        closeModal={closeLoginModal}
+        errorMessage={loginModalError}
+        handleLoginRequest={handleLoginRequest}
+      />
+      <SignUpModal
+        isOpen={isOpenSignUpModal}
+        closeModal={closeSignUpModal}
+        errorMessage={signupModalError}
+        handleRegisterUser={handleRegisterUser}
+      />
+      <LogoutModal
+        isOpen={isOpenLogoutModal}
+        closeModal={closeLogoutModal}
+        handleLogoutRequest={handleLogoutRequest}
+      />
+    </>
   );
 }
