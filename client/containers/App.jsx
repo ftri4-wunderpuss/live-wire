@@ -7,7 +7,6 @@ import Feed from './Feed.jsx';
 import Search from './Search.jsx';
 import Account from './../views/Account.jsx';
 import LoginModal from '../modals/LoginModal.jsx';
-import SignUpModal from'../modals/SignUpModal.jsx';
 
 import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
 
