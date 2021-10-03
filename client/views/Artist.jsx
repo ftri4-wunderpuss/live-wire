@@ -6,13 +6,13 @@ import FollowButton from './FollowButton.jsx';
 import UnfollowButton from './UnfollowButton.jsx';
 
 export default function Artist({
-  addArtist,
   artistId,
+  artistName,
   artistBio,
   artistImageURL,
-  artistName,
   artistIsOnTour,
   isFollowed,
+  addArtist,
   removeArtist
 }) {
   return (
