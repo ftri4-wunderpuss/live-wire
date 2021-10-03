@@ -203,6 +203,8 @@ export default function Settings({
           ))}
         </ul>
       </div>
+
+      {/* TODO add delete account component and hooks */}
     </div>
   );
 }
