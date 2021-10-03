@@ -27,10 +27,10 @@ return (
       : artists.map(artistInfo => {
           <Artist
             key={artistInfo.artistName}
-            artistDes={artistInfo.artistDes}
+            artistBio={artistInfo.artistBio}
             artistImageURL={artistInfo.artistImageURL}
             artistName={artistInfo.artistName}
-            artistOnTour={artistInfo.artistOnTour}
+            artistIsOnTour={artistInfo.artistIsOnTour}
             isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
             addArtist={addArtist}
             artistId={artistInfo.artistId}

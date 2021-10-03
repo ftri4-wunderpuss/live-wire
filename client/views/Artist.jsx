@@ -6,27 +6,28 @@ import './../sass/views/Artist.scss';
 export default function Artist({
     addArtist,
     artistId,
-    artistDes,
+    artistBio,
     artistImageURL,
     artistName,
-    artistOnTour,
+    artistIsOnTour,
     isFollowed,
     removeArtist
   }) {
 
   return (
-    <article id="artist">
+    <article className="artist-item">
       <header>
         <img src={artistImageURL}alt={`Event image for ${artistName}`}></img>
         </header>
-        <h3>{artistName}</h3>
-        <div id="artist-des">
-          <p>{artistDes}</p>
+        <h2>{artistName}</h2>
+        <div className="artist-description">
+          <p>{artistBio}</p>
         </div>
+        <div className='artist-footer'>
         {isFollowed && <UnfollowButton onClick={addArtist(artistId)}/> }
         {!isFollowed && <FollowButton onClick={removeArtist(artistId)}/>}
-        
-       </article> 
+        </div>
+    </article> 
 
   )
 } 
