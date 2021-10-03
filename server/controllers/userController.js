@@ -3,29 +3,41 @@ const bcrypt = require('bcrypt');
 const userController = {};
 
 
+/**
+ * Middleware: Create/register a new user by inserting a new entry into the users table in the database, based on information provided by the client. User information is stored in res.locals.user
+ */
 userController.createUser = async (req, res, next) => {
   try {
     const { name, email, password, city, email_notification } = req.body;
+    const last_login = new Date();
+    const last_login_ip = req.headers['x-forwarded-for'] || req.ip ;
+    //TODO add time 
     if (!email || !password) return next('Missing email address or password in userController.createUser');
+    // TODO validate user inputs (check that email is correct format, validate name, check that email_notification is a boolean)
     const passhash = await bcrypt.hash(password, 12);
-    const city_id = ``//get city name by id
-    const createUser = `INSERT INTO users(
-      name, email, passhash, city, email_notification)
-      VALUES (${name}, ${email}, ${passhash}, ${city_id}, ${email_notification}`
+    // TODO validate the city against out db, or the API
+    const city_id = ``// TODO get city name by id
 
+    //TODO: add SQL queries to db folder
+    // FIX SQL injection error (pass in array of parameters so they are sanitized - pg.query)
+    const createUser = `INSERT INTO users(
+      name, email, passhash, city, email_notification, last_login, last_login_ip)
+      VALUES (${name}, ${email}, ${passhash}, ${city_id}, ${email_notification}, ${last_login}, ${last_login_ip})
+      RETURNING *`
     const newUser = await db.query(createUser);
-    //
-    res.locals.newUser = newUser.rows;
-    res.redirect('/feed'); //does this need to be moved to login.js?
-      //how do I store last_login and last_login_ip
-      //use try/catch to handle errors?
+    res.locals.user = newUser.rows;
+    return next()
   } catch (err) {
-    console.error(error);
-    res.redirect('/')
+    console.error(err);
+    next(err);
   }
 
 }
 
+
+/**
+ * Middleware: Verify that a user's email address is in the database and that the input password matches the user's hashed password in the database based on the email address they provide. isValidPassword (boolean) is stored in `res.locals.isValidPassword`, and if password matches, user information is stored in `res.locals.user`.
+ */
 userController.verifyUser = async (req, res, next) => {
   //get email and password from request body
   const { email, password } = req.body;
@@ -35,20 +47,19 @@ userController.verifyUser = async (req, res, next) => {
   //set up query to get the stored hashed password for the email address that was entered
   const getUserInfo = `SELECT * FROM users WHERE email = ${email}`
   const userInfo = await db.query(getUserInfo);
-  const { passhash } = userInfo.rows //does this work to access the stored passhash?
+  const { passhash } = userInfo.rows //does this work to access the stored passhash? access based on index, rows is an array
 
   //if email address does not exist in the database, throw error (email or password does not match)
   if (!passhash) return next('username or password does not match in userController.verifyUser')
   //if email address does exist in the database, compare stored passhash to hashed version of password that was entered. It if doesn't match, redirect user to homepage with error message (frontend?)
   const isValidPassword = await bcrypt.compare(password, passhash);
-
+  res.locals.isValidPassword = isValidPassword;
   if(isValidPassword) {
     res.locals.user = userInfo.rows;
     return next();
   } else {
-    res.redirect('/'); //does this need to be moved to login.js?
+    return next()
   }
-  //use try/catch to handle errors?
 }
 
 
