@@ -7,7 +7,7 @@ import Feed from './Feed.jsx';
 import Search from './Search.jsx';
 import Account from './../views/Account.jsx';
 import LoginModal from '../modals/LoginModal.jsx';
-
+import useModal from '../hooks/useModal.js';
 import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
 
 /**
@@ -27,7 +27,7 @@ export default function App() {
   // globally controlled components
   const [searchValue, setSearchValue] = useState('');
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignUpModal, setSignUpModal] = useState(false);
+  const [showSignUpModal, openSignUpModal, closeSignUpModal] = useModal(false);
 
   /* ACTIONS */
 
@@ -76,13 +76,8 @@ export default function App() {
   }, []);
 
   // landing page
-  const openLoginModal = useCallback(() => {
-    setShowLoginModal(true);
-  }, []);
 
-  const openSignUpModal = useCallback(() => {
-    setShowSignUpModal(true);
-  }, []);
+ 
 
 
   /* SIDE EFFECTS */
@@ -103,7 +98,8 @@ export default function App() {
         />}
         {showSignUpModal && <SignUpModal
           isOpen={showSignUpModal}
-          setIsOpen={setShowLoginModal}
+          closeModal={closeSignUpModal}
+          handleRegisterUser={handleRegisterUser}
           />}
       </Route>
       <Route path="/feed">
