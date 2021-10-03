@@ -38,7 +38,7 @@ loginRouter.post('/',
       { artistId: 1, artistName: 'Drake White' },
       { artistId: 2, artistName: "Drake Bell" }
     ];
-    starredEventsCache = [3];
+    starredEventsCache = ["vvG1bZpmT72SPV"];
 
     return res.json({
       user: userCache,
@@ -153,6 +153,37 @@ eventsRouter.get("/",
         ticketPrice: 25,
       },
     ]);
+  }
+);
+
+eventsRouter.post('/:event_id',
+  (req, res) => {
+    if (!VALID_SESSION) return removeSession(res).json({
+      error: 'Unauthorized access.'
+    });
+
+    const eventId = req.params.event_id;
+    if (!starredEventsCache.find(e => e === eventId)) starredEventsCache.push(eventId);
+
+    res.json({
+      starredEvents: starredEventsCache,
+    });
+  }
+);
+
+eventsRouter.delete('/:event_id',
+  (req, res) => {
+    if (!VALID_SESSION) return removeSession(res).json({
+      error: 'Unauthorized access.'
+    });
+
+    const eventId = req.params.event_id;
+    const index = starredEventsCache.findIndex(e => e === eventId);
+    if (index !== -1) starredEventsCache.splice(index, 1);
+
+    res.json({
+      starredEvents: starredEventsCache,
+    });
   }
 );
 
