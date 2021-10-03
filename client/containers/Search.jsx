@@ -40,7 +40,7 @@ export default function Search({
             artistIsOnTour={artistInfo.artistIsOnTour}
             isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
             addArtist={addArtist}
-            removeArtist={() => removeArtist(artistInfo.artistId)}
+            removeArtist={removeArtist}
           ></Artist>
         )
       }
