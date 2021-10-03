@@ -2,11 +2,11 @@ import React, { useCallback, useState } from 'react';
 
 import './../sass/containers/Feed.scss';
 
-import NavBar from './../views/NavBar';
-import EventFilters from './../views/EventFilters';
-import NoEvents from './../views/NoEvents';
-import Event from './../views/Event';
-import Splash from './../views/Splash';
+import NavBar from './../views/NavBar.jsx';
+import EventFilters from './../views/EventFilters.jsx';
+import NoEvents from './../views/NoEvents.jsx';
+import Event from './../views/Event.jsx';
+import Splash from './../views/Splash.jsx';
 
 export default function Feed({
   starredEvents,
@@ -67,26 +67,28 @@ export default function Feed({
       />
       {events === undefined && <Splash />}
       {events &&
-        events.length === 0
-        ? <NoEvents />
-        : events.map(eventInfo => {
-          const artistLineup = eventInfo.artists.map(artistItem => artistItem.artistId).join(', ');
+        (
+          events.length === 0
+            ? <NoEvents />
+            : events.map(eventInfo => {
+              const artistLineup = eventInfo.artists.map(artistItem => artistItem.artistId).join(', ');
 
-          return <Event
-            key={artistLineup + eventInfo.venue}
-            hasMultipleArtist={eventInfo.artists.length > 1}
-            artistName={artistLineup}
-            eventImageUrl={eventInfo.eventImageUrl}
-            venue={eventInfo.venue}
-            date={eventInfo.date}
-            ticketPrice={eventInfo.ticketPrice.toFixed(2)}
-            isStarred={starredEvents.find(eventInfo.eventId) !== undefined}
-            removeArtist={() => {
-              if (eventInfo.artists.length === 1) removeArtist(eventInfo.artists[0].artistId);
-            }}
-            toggleIsStarred={() => toggleIsStarred(eventInfo.eventId)}
-          />;
-        })
+              return <Event
+                key={artistLineup + eventInfo.venue}
+                hasMultipleArtist={eventInfo.artists.length > 1}
+                artistName={artistLineup}
+                eventImageUrl={eventInfo.eventImageUrl}
+                venue={eventInfo.venue}
+                date={eventInfo.date}
+                ticketPrice={eventInfo.ticketPrice.toFixed(2)}
+                isStarred={starredEvents.find(eventInfo.eventId) !== undefined}
+                removeArtist={() => {
+                  if (eventInfo.artists.length === 1) removeArtist(eventInfo.artists[0].artistId);
+                }}
+                toggleIsStarred={() => toggleIsStarred(eventInfo.eventId)}
+              />;
+            })
+        )
       }
     </div>
   );

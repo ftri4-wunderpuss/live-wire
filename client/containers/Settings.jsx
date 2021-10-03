@@ -2,9 +2,9 @@ import React, { useCallback, useState } from 'react';
 
 import './../sass/containers/Settings.scss';
 
-import UnfollowButton from './../views/UnfollowButton';
-import EditButton from './../views/EditButton';
-import SettingEditField from '../views/SettingEditField';
+import UnfollowButton from './../views/UnfollowButton.jsx';
+import EditButton from './../views/EditButton.jsx';
+import SettingEditField from '../views/SettingEditField.jsx';
 
 const { isValidName, isValidEmail, isValidPassword, isValidCityName } = require('./../../shared/validation');
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './../sass/views/NoArtist.jsx';
+import './../sass/views/NoArtist.scss';
 
 export default function NoArtist() {
   return (

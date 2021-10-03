@@ -4,10 +4,12 @@ import './../sass/views/LandingPage.scss';
 
 import GuestNavBar from './GuestNavBar.jsx';
 
-export default function LandingPage() {
+export default function LandingPage({
+  openLoginModal
+}) {
   return (
     <div id="landing-page">
-      <GuestNavBar />
+      <GuestNavBar openLoginModal={openLoginModal}/>
       <div id="promo-text">
         {/* TODO add promo text */}
         <p> TODO: PROMO TEXT </p>

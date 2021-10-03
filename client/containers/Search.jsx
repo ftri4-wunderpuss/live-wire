@@ -28,21 +28,23 @@ export default function Search({
     <div id="search">
       <NavBar searchValue={searchValue} setSearchValue={setSearchValue} />
       {artists === undefined && <Splash />}
-      {artists && artists.length === 0
-        ? <NoArtist />
-        : artists.map(artistInfo =>
-          <Artist
-            key={artistInfo.artistName}
-            artistId={artistInfo.artistId}
-            artistName={artistInfo.artistName}
-            artistBio={artistInfo.artistBio}
-            artistImageURL={artistInfo.artistImageURL}
-            artistIsOnTour={artistInfo.artistIsOnTour}
-            isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
-            addArtist={addArtist}
-            removeArtist={removeArtist}
-          ></Artist>
-        )
+      {artists && (
+        artists.length === 0
+          ? <NoArtist />
+          : artists.map(artistInfo =>
+            <Artist
+              key={artistInfo.artistName}
+              artistId={artistInfo.artistId}
+              artistName={artistInfo.artistName}
+              artistBio={artistInfo.artistBio}
+              artistImageURL={artistInfo.artistImageURL}
+              artistIsOnTour={artistInfo.artistIsOnTour}
+              isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
+              addArtist={addArtist}
+              removeArtist={removeArtist}
+            ></Artist>
+          )
+      )
       }
     </div>
   );
