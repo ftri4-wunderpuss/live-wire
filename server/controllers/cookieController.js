@@ -10,6 +10,6 @@ cookieController.setSIDCookie = (req, res, next) => {
   const { sid } = res.locals; //TODO: console log res.locals.session to determine how to access sid
   res.cookie('sid', sid, { httpOnly: true, sameSite: 'lax' });
   return next();
-}
+};
 
 module.exports = cookieController;
