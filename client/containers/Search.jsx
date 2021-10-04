@@ -22,7 +22,7 @@ export default function Search({
   /* SIDE EFFECTS */
 
   useEffect(() => {
-    fetch('/api/artists/' + searchValue + 'fake', { // tODO remove fake
+    fetch('/api/artists/' + searchValue, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -39,8 +39,6 @@ export default function Search({
   }, [searchValue]);
 
   /* RENDER */
-
-  console.log({ followedArtists }); // ! remove
 
   return (
     <div id="search">

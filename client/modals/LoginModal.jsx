@@ -80,6 +80,7 @@ export default function LoginModal({
           >
             <InputLabel htmlFor="email-field">Email</InputLabel>
             <Input
+              autoFocus
               id="email-field"
               aria-describedby="email-error-text"
               value={email}
