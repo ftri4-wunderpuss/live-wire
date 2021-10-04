@@ -2,6 +2,7 @@ const db = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const userController = {};
 
+//TODO: Add/clean up error handling
 
 /**
  * Middleware: Create/register a new user by inserting a new entry into the users table in the database, based on information provided by the client. User information is stored in res.locals.user
@@ -64,13 +65,21 @@ userController.verifyUser = async (req, res, next) => {
 
 
 /**
- * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events.
+ * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events. If successful, results are stored in res.locals.userObject.
  */
 userController.getUserInfo = async(req, res, next) {
-  //userModel.getUser()
-  //userModel.getSettings()
-  //userModel.getFollowedArtists
-  //userModel.getStarredEvents
+  if (!res.locals.user) return next();
+  const { name, email, city, email_notification } = res.locals.user //TODO: console log to confirm the correct way to access these values
+  //const followedArtists = await userModel.getFollowedArtists() (return array)
+  //const starredEvents = await userModel.getStarredEvents() (return array)
+
+  res.locals.userObject = {
+    user: User, 
+    settings: Settings, 
+    followedArtists: followedArtists, 
+    starredEvents: starredEvents
+  }
+  return next();
 }
 
 

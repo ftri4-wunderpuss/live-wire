@@ -10,3 +10,13 @@
 //     VALUES (${values})
 //     RETURNING *`
 // }
+
+//TODO: write SQL queries in functions
+
+const getFollowedArtists = (userId) => {
+  //get followed artists from database and store in an array
+}
+
+const getStarredEvents = (userId) => {
+  //get starred events from database and store in an array by eventId
+}
