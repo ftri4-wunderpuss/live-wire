@@ -47,7 +47,6 @@ router.patch('/user',
 );
 
 
-
 //TODO: check for error?
 router.delete('/user', sessionController.isLoggedIn, sessionController.removeSession, userController.deleteUser, (req, res) => {
   res
@@ -56,8 +55,10 @@ router.delete('/user', sessionController.isLoggedIn, sessionController.removeSes
 });
 
 
-
 // router.get('/logout', sessionController.endSession, (req, res) => {
 // })
+
+router.get('/artists/', )
+
 
 module.exports = router;

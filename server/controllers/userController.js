@@ -33,12 +33,13 @@ userController.createUser = async (req, res, next) => {
     // FIX SQL injection error (pass in array of parameters so they are sanitized - pg.query)
     // const createCity = `INSERT INTO cities(name) VALUES('${city}') RETURNING _id`;
     const findCity = `SELECT _id FROM cities WHERE name = '${city}' `;
+    const createCity = `INSERT INTO cities(name) VALUES('${city}') RETURNING *`;
     let city_id;
     
 
     const foundCity = await db.query(findCity);
     if (foundCity.rows.length === 0) {
-      const newCity = await db.createCity(city);
+      const newCity = await db.query(createCity);
       city_id = newCity.rows[0]._id;
     } else {
       city_id = foundCity.rows[0]._id;
@@ -48,7 +49,6 @@ userController.createUser = async (req, res, next) => {
       name, email, passhash, city_id, email_notification, last_login, last_login_ip)
       VALUES ('${name}', '${email}', '${passhash}', ${city_id}, ${email_notification}, '${last_login}', '${last_login_ip}')
       RETURNING *`;
-    
     const newUser = await db.query(createUser);
     res.locals.user = newUser.rows[0];
     return next();
@@ -93,7 +93,7 @@ userController.verifyUser = async (req, res, next) => {
 userController.getUserInfo = async(req, res, next) => {
   if (!res.locals.user) return next();
 
-  const { name, email, city_id, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
+  const { _id, name, email, city_id, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
   //const followedArtists = await userModel.getFollowedArtists() (return array)
   //const starredEvents = await userModel.getStarredEvents() (return array)
   
@@ -101,6 +101,22 @@ userController.getUserInfo = async(req, res, next) => {
   const retrievedCity = await db.query(getCity);
   const city = retrievedCity.rows[0].name;
   console.log(city);
+
+  const getFollowedArtists = 
+  `SELECT artists.name, followed_artists.user_id 
+  FROM artists 
+  LEFT JOIN followed_artists ON artists._id = followed_artists.artist_id  
+  WHERE user_id = ${_id}`;
+  const retrievedFollowedArtists = await db.query(getFollowedArtists);
+  const followedArtists = retrievedFollowedArtists.rows;
+
+  const getStarredEvents = 
+  `SELECT event_id
+  FROM starred_events 
+  WHERE user_id = ${_id}`;
+  const retrievedStarredEvents = await db.query(getStarredEvents);
+  const starredEvents = retrievedStarredEvents.rows;
+
 
   res.locals.userObject = {
     user: {
@@ -111,8 +127,8 @@ userController.getUserInfo = async(req, res, next) => {
       city: city,
       email_notification: email_notification
     }, 
-    // followedArtists: followedArtists, 
-    // starredEvents: starredEvents
+    followedArtists: followedArtists, 
+    starredEvents: starredEvents
   };
   console.log(res.locals.user);
   return next();
@@ -142,7 +158,6 @@ userController.deleteUser = async (req, res, next) => {
   //deleteUser();
   return next();
 };
-
 
 
 module.exports = userController;
