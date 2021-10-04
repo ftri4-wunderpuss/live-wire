@@ -1,18 +1,12 @@
-const { Pool } = require ('pg')
+const { Pool } = require ('pg');
 
-const PG_URI = 'postgres://jxdmlpwa:VDXT5tjsvYntixux2GVQ4UVxxRsGANZt@fanny.db.elephantsql.com/jxdmlpwa'
+const PG_URI = 'postgres://jxdmlpwa:VDXT5tjsvYntixux2GVQ4UVxxRsGANZt@fanny.db.elephantsql.com/jxdmlpwa';
 
 const pool = new Pool({
   connectionString: PG_URI,
   max: 5
-})
+});
 
-module.exports = {
-    query: (text, params, callback) => {
-      console.log('executed query', text);
-      return pool.query(text, params, callback);
-    }
-  };
 /* Query to delete database model
 
 Copy and paste in query to execute
@@ -104,8 +98,17 @@ CREATE TABLE cities (
 
 const getFollowedArtists = (userId) => {
   //get followed artists from database and store in an array
-}
+};
 
 const getStarredEvents = (userId) => {
   //get starred events from database and store in an array by eventId
-}
+};
+
+module.exports = {
+  query: (text, params, callback) => {
+    console.log('executed query', text);
+    return pool.query(text, params, callback);
+  },
+  getStarredEvents,
+  getFollowedArtists,
+};
