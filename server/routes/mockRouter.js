@@ -8,6 +8,7 @@ const fetch = require('node-fetch');
 // MOCK CONFIG
 const ALLOW_LOGIN = true;
 const VALID_SESSION = true;
+const LAG_RESPONSE = true;
 
 
 // USER SYSTEM
@@ -88,10 +89,12 @@ userRouter.post('/',
 );
 
 userRouter.patch('/',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     if (req.body.name) userCache.name = req.body.name;
     if (req.body.email) userCache.email = req.body.email;
@@ -107,10 +110,12 @@ userRouter.patch('/',
 );
 
 userRouter.delete('/',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     userCache = {};
     settingCache = {};
@@ -125,12 +130,14 @@ userRouter.delete('/',
 const eventsRouter = Router();
 
 eventsRouter.get("/",
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
 
-    res.json({
+    if (LAG_RESPONSE) await delay(1000);
+
+    return res.json({
       events: [
         {
           eventId: "vvG1fZpRZbsSL5",
@@ -168,10 +175,12 @@ eventsRouter.get("/",
 );
 
 eventsRouter.post('/:event_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const eventId = req.params.event_id;
     if (!starredEventsCache.find(e => e === eventId)) starredEventsCache.push(eventId);
@@ -183,10 +192,12 @@ eventsRouter.post('/:event_id',
 );
 
 eventsRouter.delete('/:event_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const eventId = req.params.event_id;
     const index = starredEventsCache.findIndex(e => e === eventId);
@@ -202,10 +213,12 @@ eventsRouter.delete('/:event_id',
 const artistsRouter = Router();
 
 artistsRouter.get('/:term',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     res.json({
       artists: [
@@ -234,6 +247,8 @@ artistsRouter.post('/:artist_id',
       error: 'Unauthorized access.'
     });
 
+    if (LAG_RESPONSE) await delay(1000);
+
     const artistId = req.params.artist_id;
 
     if (!followedArtistsCache.find(e => e.artistId === artistId)) {
@@ -257,10 +272,12 @@ artistsRouter.post('/:artist_id',
 );
 
 artistsRouter.delete('/:artist_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const artistId = req.params.artist_id;
     const index = followedArtistsCache.findIndex(e => e.artistId === artistId);
@@ -289,6 +306,12 @@ function removeSession(res, status = 401) {
     { httpOnly: true, sameSite: 'lax', expires: new Date(Date.now() - 1000) }
   );
   return res.status(status);
+}
+
+function delay(ms) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), ms);
+  });
 }
 
 module.exports = router;
