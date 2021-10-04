@@ -2,11 +2,39 @@ import React, { useCallback, useState } from 'react';
 
 import './../sass/containers/Settings.scss';
 
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+
+
 import UnfollowButton from './../views/UnfollowButton.jsx';
 import EditButton from './../views/EditButton.jsx';
 import SettingEditField from '../views/SettingEditField.jsx';
+import { useHistory } from 'react-router-dom';
 
 const { isValidName, isValidEmail, isValidPassword, isValidCityName } = require('./../../shared/validation');
+
+function syncSettings(newSettings, history, setUser, setSettings) {
+  fetch('/api/user', {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newSettings)
+  }).then(async response => {
+    const body = await response.json();
+
+    if (response.status === 401) return history.push('/');
+    if (response.status !== 200) throw body.error;
+
+    setUser(body.user);
+    setSettings(body.settings);
+  }).catch(error => {
+    console.error(error);
+    alert(error); // todo remove
+  });
+}
 
 export default function Settings({
   user,
@@ -34,6 +62,8 @@ export default function Settings({
   const [cityFieldValue, setCityFieldValue] = useState(settings.city);
   const [cityFieldError, setCityFieldError] = useState('');
 
+  const history = useHistory();
+
 
   /* ACTIONS */
 
@@ -47,15 +77,16 @@ export default function Settings({
       return setNameFieldError('Name can only be word characters without numbers.');
     }
 
+    syncSettings({ name: nameFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setUser(user => ({
       ...user,
       name: nameFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingName(false);
-  }, [nameFieldValue, setUser]);
+  }, [history, nameFieldValue, setSettings, setUser]);
 
   // email input field
   const handleEmailValueChange = useCallback(event => {
@@ -67,15 +98,16 @@ export default function Settings({
       return setEmailFieldError('Email must be formatted correctly, example john@domain.com');
     }
 
+    syncSettings({ email: emailFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setUser(user => ({
       ...user,
       email: emailFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingEmail(false);
-  }, [emailFieldValue, setUser]);
+  }, [emailFieldValue, history, setSettings, setUser]);
 
   // password input field
   const handlePasswordValueChange = useCallback(event => {
@@ -87,10 +119,10 @@ export default function Settings({
       return setPasswordFieldError('Password must contain an upper-case, lower-case, and digit character and be at least 6 characters long.');
     }
 
-    // TODO send AJAX request
+    syncSettings({ password: passwordFieldValue }, history, setUser, setSettings);
 
     setIsEditingPassword(false);
-  }, [passwordFieldValue]);
+  }, [history, passwordFieldValue, setSettings, setUser]);
 
   // city input field
   const handleCityValueChange = useCallback(event => {
@@ -99,112 +131,148 @@ export default function Settings({
 
   const handleCitySave = useCallback(() => {
     if (!isValidCityName(cityFieldValue)) {
-      return setCityFieldError('Password must contain an upper-case, lower-case, and digit character and be at least 6 characters long.');
+      return setCityFieldError('City name is not valid.');
     }
 
+    // TODO handle server responding with invalid city error message
+    syncSettings({ city: cityFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setSettings(settings => ({
       ...settings,
       city: cityFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingCity(false);
-  }, [cityFieldValue, setSettings]);
+  }, [cityFieldValue, history, setSettings, setUser]);
 
   // email notification toggle
   const handleEmailNotificationToggle = useCallback(event => {
+    syncSettings({ receiveEmailNotifications: event.target.checked }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setSettings(settings => ({
       ...settings,
       receiveEmailNotifications: event.target.checked,
     }));
+  }, [history, setSettings, setUser]);
 
-    // TODO send AJAX request
-  }, [setSettings]);
 
   /* RENDER */
 
   return (
-    <div id='settings'>
-      <div id='account-settings'>
-        <ul>
-          {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
-          {isEditingName && <li>
-            <SettingEditField
-              value={nameFieldValue}
-              onChange={handleNameValueChange}
-              handleEnterKeydown={handleNameSave}
-              errorMessage={nameFieldError}
-            />
-          </li>}
-
-          {!isEditingEmail && <li>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></li>}
-          {isEditingEmail && <li>
-            <SettingEditField
-              value={emailFieldValue}
-              onChange={handleEmailValueChange}
-              handleEnterKeydown={handleEmailSave}
-              errorMessage={emailFieldError}
-            />
-          </li>}
-
-          {!isEditingPassword && <li onClick={() => setIsEditingPassword(true)}><a>Change password?</a></li>}
-          {isEditingPassword && <li>
-            <SettingEditField
-              value={passwordFieldValue}
-              onChange={handlePasswordValueChange}
-              handleEnterKeydown={handlePasswordSave}
-              errorMessage={passwordFieldError}
-            />
-          </li>}
-        </ul>
-      </div>
-
-      <div id='filter-settings'>
-        <ul>
-          {!isEditingCity && <li>{settings.city} <EditButton onClick={() => setIsEditingCity(true)} /></li>}
-          {isEditingCity && <li>
-            <SettingEditField
-              value={cityFieldValue}
-              onChange={handleCityValueChange}
-              handleEnterKeydown={handleCitySave}
-              errorMessage={cityFieldError}
-            />
-          </li>}
-        </ul>
-      </div>
-
-      <div id='notification-settings'>
-        <ul>
-          <li>
-            <input
-              type="checkbox"
-              id="email-notification"
-              name="email-notification"
-              checked={settings.receiveEmailNotifications}
-              onChange={handleEmailNotificationToggle}
-            />
-            <label htmlFor="email-notification">Email Notification</label>
-          </li>
-          {/* STRETCH setup browser notifications */}
-          <li><a>Activate Browser Notifications</a></li>
-        </ul>
-      </div>
-
-      <div id='followed-artist-settings'>
-        <ul>
-          {followedArtists.map(artistListItem => (
-            <li key={artistListItem.artistName}>
-              {artistListItem.artistName}
-              <UnfollowButton
-                onClick={() => removeArtist(artistListItem.artistId)}
+    <Container maxWidth="sm">
+      <Stack
+        id='settings'
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={3}
+      >
+        <Paper
+          id='account-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
+            {isEditingName && <li>
+              <SettingEditField
+                id="name-input-field"
+                placeholder="Name"
+                value={nameFieldValue}
+                onChange={handleNameValueChange}
+                handleEnterKeydown={handleNameSave}
+                errorMessage={nameFieldError}
               />
-            </li>
-          ))}
-        </ul>
-      </div>
+            </li>}
 
-      {/* TODO add delete account component and hooks */}
-    </div>
+            {!isEditingEmail && <li>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></li>}
+            {isEditingEmail && <li>
+              <SettingEditField
+                id="email-input-field"
+                placeholder="Email"
+                value={emailFieldValue}
+                onChange={handleEmailValueChange}
+                handleEnterKeydown={handleEmailSave}
+                errorMessage={emailFieldError}
+              />
+            </li>}
+
+            {!isEditingPassword && <li onClick={() => setIsEditingPassword(true)}><a>Change password?</a></li>}
+            {isEditingPassword && <li>
+              <SettingEditField
+                id="password-input-field"
+                placeholder="Password"
+                value={passwordFieldValue}
+                onChange={handlePasswordValueChange}
+                handleEnterKeydown={handlePasswordSave}
+                errorMessage={passwordFieldError}
+              />
+            </li>}
+          </ul>
+        </Paper>
+
+        <Paper
+          id='filter-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {!isEditingCity && <li>{settings.city} <EditButton onClick={() => setIsEditingCity(true)} /></li>}
+            {isEditingCity && <li>
+              <SettingEditField
+                id="city-input-field"
+                placeholder="Home City"
+                value={cityFieldValue}
+                onChange={handleCityValueChange}
+                handleEnterKeydown={handleCitySave}
+                errorMessage={cityFieldError}
+              />
+            </li>}
+          </ul>
+        </Paper>
+
+        <Paper
+          id='notification-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            <li>
+              <input
+                type="checkbox"
+                id="email-notification"
+                name="email-notification"
+                checked={settings.receiveEmailNotifications}
+                onChange={handleEmailNotificationToggle}
+              />
+              <label htmlFor="email-notification">Email Notification</label>
+            </li>
+            {/* STRETCH setup browser notifications */}
+            <li><a>Activate Browser Notifications</a></li>
+          </ul>
+        </Paper>
+
+        <Paper
+          id='followed-artist-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {followedArtists.map(artistListItem => (
+              <li key={artistListItem.artistName}>
+                {artistListItem.artistName}
+                <UnfollowButton
+                  onClick={() => removeArtist({ artistId: artistListItem.artistId, artistName: artistListItem.artistName })}
+                />
+              </li>
+            ))}
+          </ul>
+        </Paper>
+
+        {/* TODO add delete account component and hooks */}
+      </Stack>
+    </Container>
   );
 }
