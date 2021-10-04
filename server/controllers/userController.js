@@ -66,7 +66,7 @@ userController.verifyUser = async (req, res, next) => {
 /**
  * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events. If successful, results are stored in res.locals.userObject.
  */
-userController.getUserInfo = async(req, res, next) {
+userController.getUserInfo = async(req, res, next)  {
   if (!res.locals.user) return next();
   const { name, email, city, email_notification } = res.locals.user //TODO: console log to confirm the correct way to access these values
   //const followedArtists = await userModel.getFollowedArtists() (return array)
