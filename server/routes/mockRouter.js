@@ -12,6 +12,7 @@ const VALID_SESSION = true;
 
 // USER SYSTEM
 const loginRouter = Router();
+const logoutRouter = Router();
 const userRouter = Router();
 
 let userCache = {};
@@ -46,6 +47,13 @@ loginRouter.post('/',
       followedArtists: followedArtistsCache,
       starredEvents: starredEventsCache,
     });
+  }
+);
+
+//  logout 
+logoutRouter.post('/',
+  (req, res) => {
+    return removeSession(res, 200).sendStatus(200);
   }
 );
 
@@ -263,6 +271,7 @@ artistsRouter.delete('/:artist_id',
 const router = Router();
 
 router.use('/login', loginRouter);
+router.use('/logout', logoutRouter);
 router.use('/api/user', userRouter);
 router.use('/api/events', eventsRouter);
 router.use('/api/artists', artistsRouter);

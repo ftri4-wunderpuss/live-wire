@@ -11,7 +11,7 @@ import LogoutModal from '../modals/LogoutModal.jsx';
 
 import useModal from '../hooks/useModal.js';
 
-import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
+import { validateArtistListItem, validateEventId } from '../../shared/frontEndStateValidation';
 
 /**
  * Stateful component. App maintains user, settings, followedArtists, starredEvents, and searchValue state.
@@ -43,10 +43,29 @@ export default function App() {
 
   // login/signup actions
   const handleLoginRequest = useCallback((email, password) => {
-    // TODO handle AJAX login
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    }).then(async response => {
+      const body = await response.json();
 
-    console.log({ email, password });
-    closeLoginModal();
+      if (response.status === 401) return setLoginModalError(body.error);
+
+      // TODO validate server response with frontEndStateValidator
+
+      setUser(body.user);
+      setSettings(body.settings);
+      setFollowedArtists(body.followedArtists);
+      setStarredEvents(body.starredEvents);
+      closeLoginModal();
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
   }, [closeLoginModal]);
 
   const handleRegisterUser = useCallback((...args) => {
@@ -56,12 +75,31 @@ export default function App() {
     closeSignUpModal();
   }, [closeSignUpModal]);
 
-  const handleLogoutRequest = useCallback((...args) => {
-    // TODO handle AJAX login
+  const handleLogoutRequest = useCallback(() => {
+    // TODO work on this
+    fetch('/logout', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then(async response => {
+      const body = await response.json();
 
-    console.log({ args });
-    closeSignUpModal();
-  }, [closeSignUpModal]);
+      console.log({ body });
+
+      if (response.status !== 200) throw body.error;
+
+      setUser(undefined);
+      setSettings(undefined);
+      setFollowedArtists(undefined);
+      setStarredEvents(undefined);
+      closeLogoutModal();
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+  }, [closeLogoutModal]);
 
 
   // artist list
@@ -122,6 +160,7 @@ export default function App() {
             openLoginModal={openLoginModal}
             openSignUpModal={openSignUpModal}
           />
+          {user && <Redirect to='/feed' />}
         </Route>
         <Route path="/feed">
           {user
@@ -137,7 +176,7 @@ export default function App() {
             : <Redirect to="/" />}
         </Route>
         <Route path="/search">
-          {!user
+          {user
             ? <Search
               followedArtists={followedArtists}
               searchValue={searchValue}

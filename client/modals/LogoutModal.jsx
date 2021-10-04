@@ -22,30 +22,28 @@ export default function LoginModal({
   /* RENDER */
 
   return (
-    <div>
-      <Dialog
-        fullScreen={fullScreen}
-        open={isOpen}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          Logout
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            You will be returned to the landing page
-          </DialogContentText>
-        </DialogContent>
+    <Dialog
+      fullScreen={fullScreen}
+      open={isOpen}
+      aria-labelledby="responsive-dialog-title"
+    >
+      <DialogTitle id="responsive-dialog-title">
+        Logout
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          You will be returned to the landing page
+        </DialogContentText>
+      </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleLogoutRequest}>
-            Logout
-          </Button>
-          <Button onClick={closeModal}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+      <DialogActions>
+        <Button onClick={handleLogoutRequest}>
+          Logout
+        </Button>
+        <Button onClick={closeModal}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
