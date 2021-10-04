@@ -2,6 +2,13 @@ import React, { useCallback } from 'react';
 
 import './../sass/views/EventFilters.scss';
 
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
 export default function EventFilters({
   locationFilterValue,
   dateFromFilterValue,
@@ -12,6 +19,13 @@ export default function EventFilters({
   setDateFromFilterValue,
   setDateToFilterValue,
 }) {
+
+  const [value, setValue] = React.useState([null, null]);
+
+
+  console.log({ value }); // ! remove
+
+
   const onLocationFilterChange = useCallback(event => {
     setLocationFilterValue(event.target.value);
   }, [setLocationFilterValue]);
@@ -24,32 +38,32 @@ export default function EventFilters({
     setDateToFilterValue(event.target.value);
   }, [setDateToFilterValue]);
 
+  // TODO actually sort by date rangers
+  // TODO fix styling of search fields
+
   return (
-    <div id='event-filters' >
-      <div id='input-filters'>
-        <input
-          id='location-filter'
-          type='text'
-          required minLength='1' size='30'
-          value={locationFilterValue}
-          onChange={onLocationFilterChange}
+    <AppBar id='event-filters' position="sticky">
+      <LocalizationProvider
+        dateAdapter={AdapterDateFns}
+      >
+        <DateRangePicker
+          startText="From"
+          endText="To"
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+          renderInput={(startProps, endProps) => (
+            <React.Fragment
+              id='date-range'
+            >
+              <TextField {...startProps} />
+              <TextField {...endProps} />
+            </React.Fragment>
+          )}
         />
-        <input
-          id='date-from-filter'
-          type='text'
-          required minLength='1' size='30'
-          value={dateFromFilterValue}
-          onChange={onDateFromFilterChange}
-        />
-        <input
-          id='date-to-filter'
-          type='text'
-          required minLength='1' size='30'
-          value={dateToFilterValue}
-          onChange={onDateToFilterChange}
-        />
-      </div>
-      <a onClick={toggleShowStarredEvents}>{showStarredEvents ? 'hide' : 'show'} starred</a>
-    </div>
+      </LocalizationProvider>
+      {/* TODO add back <Button color="inherit" onClick={toggleShowStarredEvents}>{showStarredEvents ? 'Unsort Star' : 'Sort Star'}</Button>*/}
+    </AppBar>
   );
 }

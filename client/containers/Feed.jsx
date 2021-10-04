@@ -116,6 +116,7 @@ export default function Feed({
         <Stack
           direction="column"
           spacing={3}
+          mt={3}
         >
           {
             events.length === 0
