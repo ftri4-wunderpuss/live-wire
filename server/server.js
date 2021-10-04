@@ -1,5 +1,7 @@
 const path = require('path');
 const express = require('express');
+const cookieparser = require('cookie-parser');
+
 
 const apiRouter = require('./routes/api');
 const loginRouter = require('./routes/login');
@@ -13,6 +15,8 @@ const app = express();
 
 /* MIDDLEWARE */
 app.use(express.json());
+app.use(cookieparser());
+
 
 
 /* ROUTES */
@@ -20,7 +24,8 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
   app.use('/', express.static(path.join(__dirname, '../build')));
-  // app.use('/api', apiRouter)
+  app.use('/login', loginRouter);
+  app.use('/api', apiRouter);
 }
 
 if (process.env.NODE_ENV === 'development') {

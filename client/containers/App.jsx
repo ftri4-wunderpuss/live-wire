@@ -11,11 +11,7 @@ import LogoutModal from '../modals/LogoutModal.jsx';
 
 import useModal from '../hooks/useModal.js';
 
-<<<<<<< HEAD
-import { validateArtistListItem, validateEventId } from './../../shared/frontEndStateValidation';
-=======
 import { validateArtistListItem, validateEventId } from '../../shared/frontEndStateValidation';
->>>>>>> d9dd5e64783c6478ef0189fa144bc367c899a825
 
 /**
  * Stateful component. App maintains user, settings, followedArtists, starredEvents, and searchValue state.

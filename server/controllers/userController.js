@@ -10,25 +10,47 @@ const userController = {};
 userController.createUser = async (req, res, next) => {
   try {
     const { name, email, password, city, email_notification } = req.body;
-    const last_login = new Date();
+    // console.log(req.body);
+    const pad = function(num) { return ('00'+num).slice(-2) };
+    let date;
+    date = new Date();
+    date = date.getUTCFullYear()         + '-' +
+            pad(date.getUTCMonth() + 1)  + '-' +
+            pad(date.getUTCDate());       //+ ' ' +
+            // pad(date.getUTCHours())      + ':' +
+            // pad(date.getUTCMinutes())    + ':' +
+            // pad(date.getUTCSeconds());
+    const last_login = date; //new Date();
     const last_login_ip = req.headers['x-forwarded-for'] || req.ip;
     //TODO add time 
-    if (!email || !password) return next('Missing email address or password in userController.createUser');
+    // if (!email || !password) return next('Missing email address or password in userController.createUser');
     // TODO validate user inputs (check that email is correct format, validate name, check that email_notification is a boolean)
     const passhash = await bcrypt.hash(password, 12);
     // TODO validate the city against out db, or the API
-    const city_id = 2;// TODO get city name by id (placeholder)
+    // TODO get city name by id (placeholder)
 
     //TODO: add SQL queries to db folder
     // FIX SQL injection error (pass in array of parameters so they are sanitized - pg.query)
+    // const createCity = `INSERT INTO cities(name) VALUES('${city}') RETURNING _id`;
+    const findCity = `SELECT _id FROM cities WHERE name = '${city}' `;
+    let city_id;
+    
+
+    const foundCity = await db.query(findCity);
+    if (foundCity.rows.length === 0) {
+      const newCity = await db.createCity(city);
+      city_id = newCity.rows[0]._id;
+    } else {
+      city_id = foundCity.rows[0]._id;
+    }
+
     const createUser = `INSERT INTO users(
-      name, email, passhash, city, email_notification, last_login, last_login_ip)
-      VALUES (${name}, ${email}, ${passhash}, ${city_id}, ${email_notification}, ${last_login}, ${last_login_ip})
+      name, email, passhash, city_id, email_notification, last_login, last_login_ip)
+      VALUES ('${name}', '${email}', '${passhash}', ${city_id}, ${email_notification}, '${last_login}', '${last_login_ip}')
       RETURNING *`;
+    
     const newUser = await db.query(createUser);
-    console.log(newUser);
-    res.locals.user = newUser.rows;
-    console.log(res.local.user);
+    res.locals.user = newUser.rows[0];
     return next();
   } catch (err) {
     next(err);
@@ -47,9 +69,9 @@ userController.verifyUser = async (req, res, next) => {
   //check if user has entered email and password
   if (!email || !password) return next('Missing email address or password in userController.createUser');
   //set up query to get the stored hashed password for the email address that was entered
-  const getUserInfo = `SELECT * FROM users WHERE email = ${email}`;
+  const getUserInfo = `SELECT * FROM users WHERE email = '${email}'`;
   const userInfo = await db.query(getUserInfo);
-  const { passhash } = userInfo.rows;//does this work to access the stored passhash? access based on index, rows is an array
+  const { passhash } = userInfo.rows[0];//does this work to access the stored passhash? access based on index, rows is an array
 
   //if email address does not exist in the database, throw error (email or password does not match)
   if (!passhash) return next('username or password does not match in userController.verifyUser');
@@ -57,7 +79,7 @@ userController.verifyUser = async (req, res, next) => {
   const isCorrectPassword = await bcrypt.compare(password, passhash);
   res.locals.isCorrectPassword = isCorrectPassword;
   if (isCorrectPassword) {
-    res.locals.user = userInfo.rows;
+    res.locals.user = userInfo.rows[0];
     return next();
   } else {
     return next();
@@ -70,9 +92,15 @@ userController.verifyUser = async (req, res, next) => {
  */
 userController.getUserInfo = async(req, res, next) => {
   if (!res.locals.user) return next();
-  const { name, email, city, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
+
+  const { name, email, city_id, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
   //const followedArtists = await userModel.getFollowedArtists() (return array)
   //const starredEvents = await userModel.getStarredEvents() (return array)
+  
+  const getCity = `SELECT name FROM cities WHERE _id = ${city_id}`;
+  const retrievedCity = await db.query(getCity);
+  const city = retrievedCity.rows[0].name;
+  console.log(city);
 
   res.locals.userObject = {
     user: {
@@ -86,6 +114,7 @@ userController.getUserInfo = async(req, res, next) => {
     // followedArtists: followedArtists, 
     // starredEvents: starredEvents
   };
+  console.log(res.locals.user);
   return next();
 };
 
