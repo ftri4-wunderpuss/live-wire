@@ -21,7 +21,7 @@ export default function LandingPage({
           id="promo-text"
           elevation={5}
         >
-          <Typography id='livewire-font' variant="h1" component="h1" mb={5} color='secondary.main' textAlign='center'> Live Wire</Typography>
+          <Typography id='livewire-font' variant="h1" component="h1" mb={5} color='secondary.main' textAlign='center'>Live Wire</Typography>
           <Typography variant="h4" component="h3" mb={3} color='secondary.dark'> Your curated live music listing</Typography>
           <Typography component='p' mb={2} color='secondary.light'>
             Always be in the know when your favorite bands come to town.
