@@ -8,7 +8,6 @@ import { HashRouter } from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/system';
 
-
 import App from './containers/App.jsx';
 
 const theme = createTheme({

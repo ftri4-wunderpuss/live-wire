@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 
 import LandingPage from '../views/LandingPage.jsx';
@@ -10,6 +10,9 @@ import SignUpModal from './../modals/SignUpModal.jsx';
 import LogoutModal from '../modals/LogoutModal.jsx';
 
 import useModal from '../hooks/useModal.js';
+import useWindowResize from './../hooks/useWindowResize';
+
+import backgroundImageUrl from './../assets/images/wallpaper/1490296.jpg';
 
 import { validateArtistListItem, validateEventId } from '../../shared/frontEndStateValidation';
 
@@ -38,8 +41,27 @@ export default function App() {
 
   const [isOpenLogoutModal, openLogoutModal, closeLogoutModal] = useModal(false);
 
+  // window size
+  const [screenWidth, screenHeight] = useWindowResize();
+
 
   /* ACTIONS */
+
+  useEffect(() => {
+    // TODO figure out why webpack isn't behaving nice with direct imports in scss...
+    document.body.style.background = `no-repeat center center fixed url(${backgroundImageUrl})`;
+    // width is 1.6 the height
+
+    // whenever width is more than 1.6 height, switch to 100% auto;
+    const ratio = screenWidth / screenHeight;
+
+    if (ratio > 1.6) {
+      document.body.style.backgroundSize = `100% auto`;
+    } else {
+      document.body.style.backgroundSize = `auto 100%`;
+    }
+
+  }, [screenWidth, screenHeight]);
 
   // STRETCH debounce bellow functions in case of rapid user clicks.
 
