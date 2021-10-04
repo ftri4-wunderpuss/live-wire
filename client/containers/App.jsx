@@ -48,10 +48,12 @@ export default function App() {
   /* ACTIONS */
 
   useEffect(() => {
-    // TODO figure out why webpack isn't behaving nice with direct imports in scss...
-    document.body.style.background = `no-repeat center center fixed url(${backgroundImageUrl})`;
-    // width is 1.6 the height
+    // if not in landing page
+    document.body.style.background = `linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), no-repeat center center fixed url(${backgroundImageUrl})`;
 
+    if (user) document.body.style.background = `linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), no-repeat center center fixed url(${backgroundImageUrl})`;
+
+    // width is 1.6 the height
     // whenever width is more than 1.6 height, switch to 100% auto;
     const ratio = screenWidth / screenHeight;
 
@@ -61,7 +63,7 @@ export default function App() {
       document.body.style.backgroundSize = `auto 100%`;
     }
 
-  }, [screenWidth, screenHeight]);
+  }, [screenWidth, screenHeight, user]);
 
   // STRETCH debounce bellow functions in case of rapid user clicks.
 

@@ -51,8 +51,8 @@ export default function EventFilters({
           }}
           renderInput={(startProps, endProps) => (
             <React.Fragment>
-              <TextField {...startProps} />
-              <TextField {...endProps} />
+              <TextField {...startProps} size="small" />
+              <TextField {...endProps} size="small" />
             </React.Fragment>
           )}
         />

@@ -27,7 +27,7 @@ export default function LandingPage({
             Always be in the know when your favorite bands come to town.
           </Typography>
           <Typography component='p' mb={2} color='secondary.light'>
-            Search and follow all your favorite artists. Your feed
+            Search and follow your favorite artists. Your feed
             will show all their upcoming concerts in your city.
           </Typography>
           <Typography component='p' mb={2} color='secondary.light'>
