@@ -11,7 +11,7 @@ import LogoutModal from '../modals/LogoutModal.jsx';
 
 import useModal from '../hooks/useModal.js';
 
-import { validateArtistListItem, validateEventId } from './../../shared/fontEndStateValidation';
+import { validateArtistListItem, validateEventId } from '../../shared/frontEndStateValidation';
 
 /**
  * Stateful component. App maintains user, settings, followedArtists, starredEvents, and searchValue state.
@@ -43,31 +43,101 @@ export default function App() {
 
   // login/signup actions
   const handleLoginRequest = useCallback((email, password) => {
-    // TODO handle AJAX login
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    }).then(async response => {
+      const body = await response.json();
 
-    console.log({ email, password });
-    closeLoginModal();
+      if (response.status === 401) return setLoginModalError(body.error);
+
+      // TODO validate server response with frontEndStateValidator
+
+      setUser(body.user);
+      setSettings(body.settings);
+      setFollowedArtists(body.followedArtists);
+      setStarredEvents(body.starredEvents);
+      closeLoginModal();
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
   }, [closeLoginModal]);
 
-  const handleRegisterUser = useCallback((...args) => {
-    // TODO handle AJAX login
+  const handleRegisterUser = useCallback((name, email, password, city, receiveEmailNotifications = false) => {
+    fetch('/api/user', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password, city, receiveEmailNotifications }),
+    }).then(async response => {
+      const body = await response.json();
 
-    console.log({ args });
-    closeSignUpModal();
+      if (response.status === 401) return setSignupModalError(body.error);
+
+      // TODO validate server response with frontEndStateValidator
+
+      setUser(body.user);
+      setSettings(body.settings);
+      setFollowedArtists(body.followedArtists);
+      setStarredEvents(body.starredEvents);
+
+      closeSignUpModal();
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
   }, [closeSignUpModal]);
 
-  const handleLogoutRequest = useCallback((...args) => {
-    // TODO handle AJAX login
+  const handleLogoutRequest = useCallback(() => {
+    fetch('/logout', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then(async response => {
+      const body = await response.json();
 
-    console.log({ args });
-    closeSignUpModal();
-  }, [closeSignUpModal]);
+      if (response.status !== 200) throw body.error;
+
+      setUser(undefined);
+      setSettings(undefined);
+      setFollowedArtists(undefined);
+      setStarredEvents(undefined);
+      closeLogoutModal();
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+  }, [closeLogoutModal]);
 
 
   // artist list
   const addArtist = useCallback(artist => {
     validateArtistListItem(artist);
 
+    fetch('/api/artists/' + artist.artistId, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+      },
+    }).then(async response => {
+      const body = await response.json();
+
+      setFollowedArtists(body.followedArtists);
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+
+    // bellow happens immediately, and can later be updated with sync from server
     setFollowedArtists(followedArtists => {
       // add artist if it does not already exist
       if (!followedArtists.find(a => a.artistId === artist.artistId)) return [...followedArtists, artist];
@@ -78,10 +148,26 @@ export default function App() {
   const removeArtist = useCallback(artist => {
     validateArtistListItem(artist);
 
+    fetch('/api/artists/' + artist.artistId, {
+      method: "DELETE",
+      headers: {
+        'Accept': 'application/json',
+      },
+    }).then(async response => {
+      const body = await response.json();
+
+      setFollowedArtists(body.followedArtists);
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+
+    // bellow happens immediately, and can later be updated with sync from server
     setFollowedArtists(followedArtists => {
       // remove artist if he exists
       const index = followedArtists.findIndex(a => a.artistId === artist.artistId);
-      if (index !== -1) return followedArtists.splice(index, 1);
+
+      if (index !== -1) return [...followedArtists.slice(0, index), ...followedArtists.slice(index + 1)];
       return followedArtists;
     });
   }, []);
@@ -90,6 +176,21 @@ export default function App() {
   const addEvent = useCallback(eventId => {
     validateEventId(eventId);
 
+    fetch('/api/events/' + eventId, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+      },
+    }).then(async response => {
+      const body = await response.json();
+
+      setStarredEvents(body.starredEvents);
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+
+    // bellow happens immediately, and can later be updated with sync from server
     setStarredEvents(starredEvents => {
       // add event if it does not already exist
       if (!starredEvents.find(eId => eId === eventId)) return [...starredEvents, eventId];
@@ -100,16 +201,28 @@ export default function App() {
   const removeEvent = useCallback(eventId => {
     validateEventId(eventId);
 
+    fetch('/api/events/' + eventId, {
+      method: "DELETE",
+      headers: {
+        'Accept': 'application/json',
+      },
+    }).then(async response => {
+      const body = await response.json();
+
+      setStarredEvents(body.starredEvents);
+    }).catch(error => {
+      console.error(error);
+      alert(error); // TODO remove
+    });
+
+    // bellow happens immediately, and can later be updated with sync from server
     setStarredEvents(starredEvents => {
       // remove event if it exists in the list
       const index = starredEvents.findIndex(eId => eId === eventId);
-      if (index !== -1) return starredEvents.splice(index, 1);
+      if (index !== -1) return [...starredEvents.slice(0, index), ...starredEvents.slice(index + 1)];
       return starredEvents;
     });
   }, []);
-
-
-  /* SIDE EFFECTS */
 
 
   /* RENDER */
@@ -122,10 +235,12 @@ export default function App() {
             openLoginModal={openLoginModal}
             openSignUpModal={openSignUpModal}
           />
+          {user && <Redirect to='/feed' />}
         </Route>
         <Route path="/feed">
           {user
             ? <Feed
+              followedArtists={followedArtists}
               starredEvents={starredEvents}
               searchValue={searchValue}
               setSearchValue={setSearchValue}
@@ -137,7 +252,7 @@ export default function App() {
             : <Redirect to="/" />}
         </Route>
         <Route path="/search">
-          {!user
+          {user
             ? <Search
               followedArtists={followedArtists}
               searchValue={searchValue}

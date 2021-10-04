@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
-    index: "./client/index.js",
+    index: ["babel-polyfill", "./client/index.js"],
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -70,6 +70,7 @@ module.exports = {
     publicPath: '/',
     proxy: {
       '/login': { target: 'http://localhost:3000' },
+      '/logout': { target: 'http://localhost:3000' },
       '/api': { target: 'http://localhost:3000' },
     },
     hot: true,
