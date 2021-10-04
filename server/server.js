@@ -25,7 +25,9 @@ if (process.env.NODE_ENV === 'production') {
 
 if (process.env.NODE_ENV === 'development') {
   // This router serves static JSON data to mock actual API calls for front-end development
-  app.use('/', require('./routes/mockRouter'));
+  // app.use('/', require('./routes/mockRouter'));
+  app.use('/login', loginRouter);
+  app.use('/api', apiRouter);
 }
 
 app.use('/login', loginRouter);
