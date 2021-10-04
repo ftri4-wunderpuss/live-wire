@@ -14,10 +14,15 @@ export default function Account({
   setUser,
   setSettings,
   removeArtist,
+  openLogoutModal,
 }) {
   return (
     <div id='account'>
-      <NavBar searchValue={searchValue} setSearchValue={setSearchValue} />
+      <NavBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        openLogoutModal={openLogoutModal}
+      />
       <Settings
         user={user}
         settings={settings}
