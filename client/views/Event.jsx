@@ -2,7 +2,7 @@ import React from 'react';
 
 import './../sass/views/Event.scss';
 
-import UnfollowButton from './UnfollowButton';
+import UnfollowButton from './UnfollowButton.jsx';
 
 export default function Event({
   hasMultipleArtist,

@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 
 const apiRouter = require('./routes/api');
+const loginRouter = require('./routes/login');
+
 
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || 'localhost';
@@ -25,6 +27,9 @@ if (process.env.NODE_ENV === 'development') {
   // This router serves static JSON data to mock actual API calls for front-end development
   app.use('/', require('./routes/mockRouter'));
 }
+
+app.use('/login', loginRouter);
+
 
 //catch-all route handler
 // app.use((req, res) => res.status(404).send('Oh no!! Page not found'));

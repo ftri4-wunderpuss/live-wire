@@ -12,7 +12,8 @@ export default function Search({
   searchValue,
   setSearchValue,
   addArtist,
-  removeArtist
+  removeArtist,
+  openLogoutModal
 }) {
   /* STATE */
 
@@ -26,23 +27,29 @@ export default function Search({
 
   return (
     <div id="search">
-      <NavBar searchValue={searchValue} setSearchValue={setSearchValue} />
+      <NavBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        openLogoutModal={openLogoutModal}
+      />
       {artists === undefined && <Splash />}
-      {artists && artists.length === 0
-        ? <NoArtist />
-        : artists.map(artistInfo =>
-          <Artist
-            key={artistInfo.artistName}
-            artistId={artistInfo.artistId}
-            artistName={artistInfo.artistName}
-            artistBio={artistInfo.artistBio}
-            artistImageURL={artistInfo.artistImageURL}
-            artistIsOnTour={artistInfo.artistIsOnTour}
-            isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
-            addArtist={addArtist}
-            removeArtist={removeArtist}
-          ></Artist>
-        )
+      {artists && (
+        artists.length === 0
+          ? <NoArtist />
+          : artists.map(artistInfo =>
+            <Artist
+              key={artistInfo.artistName}
+              artistId={artistInfo.artistId}
+              artistName={artistInfo.artistName}
+              artistBio={artistInfo.artistBio}
+              artistImageURL={artistInfo.artistImageURL}
+              artistIsOnTour={artistInfo.artistIsOnTour}
+              isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
+              addArtist={addArtist}
+              removeArtist={removeArtist}
+            ></Artist>
+          )
+      )
       }
     </div>
   );
