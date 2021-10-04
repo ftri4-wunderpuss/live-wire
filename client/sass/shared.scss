@@ -1,5 +1,15 @@
 @import "config.scss";
 
+@font-face {
+  font-family: "StrokeyBacon";
+  src: url("./../assets/fonts/STROKEYB.TTF") format("truetype");
+}
+
+#logo-text,
+#livewire-font {
+  font-family: "StrokeyBacon", sans-serif;
+}
+
 body {
   background-color: lighten(black, 60%);
 }

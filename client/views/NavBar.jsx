@@ -89,8 +89,8 @@ export default function NavBar({
         <Toolbar>
           {/* TODO <img alt='page logo' /> */}
           <Typography
-            id='nav-bar-logo'
-            variant="h4"
+            id='logo-text'
+            variant="h3"
             component="div"
             sx={{ flexGrow: 1, minWidth: 100 }}
             onClick={navigateToFeed}
