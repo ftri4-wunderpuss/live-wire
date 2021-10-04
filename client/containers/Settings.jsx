@@ -10,8 +10,31 @@ import Container from '@mui/material/Container';
 import UnfollowButton from './../views/UnfollowButton.jsx';
 import EditButton from './../views/EditButton.jsx';
 import SettingEditField from '../views/SettingEditField.jsx';
+import { useHistory } from 'react-router-dom';
 
 const { isValidName, isValidEmail, isValidPassword, isValidCityName } = require('./../../shared/validation');
+
+function syncSettings(newSettings, history, setUser, setSettings) {
+  fetch('/api/user', {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newSettings)
+  }).then(async response => {
+    const body = await response.json();
+
+    if (response.status === 401) return history.push('/');
+    if (response.status !== 200) throw body.error;
+
+    setUser(body.user);
+    setSettings(body.settings);
+  }).catch(error => {
+    console.error(error);
+    alert(error); // todo remove
+  });
+}
 
 export default function Settings({
   user,
@@ -39,6 +62,8 @@ export default function Settings({
   const [cityFieldValue, setCityFieldValue] = useState(settings.city);
   const [cityFieldError, setCityFieldError] = useState('');
 
+  const history = useHistory();
+
 
   /* ACTIONS */
 
@@ -52,15 +77,16 @@ export default function Settings({
       return setNameFieldError('Name can only be word characters without numbers.');
     }
 
+    syncSettings({ name: nameFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setUser(user => ({
       ...user,
       name: nameFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingName(false);
-  }, [nameFieldValue, setUser]);
+  }, [history, nameFieldValue, setSettings, setUser]);
 
   // email input field
   const handleEmailValueChange = useCallback(event => {
@@ -72,15 +98,16 @@ export default function Settings({
       return setEmailFieldError('Email must be formatted correctly, example john@domain.com');
     }
 
+    syncSettings({ email: emailFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setUser(user => ({
       ...user,
       email: emailFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingEmail(false);
-  }, [emailFieldValue, setUser]);
+  }, [emailFieldValue, history, setSettings, setUser]);
 
   // password input field
   const handlePasswordValueChange = useCallback(event => {
@@ -92,10 +119,10 @@ export default function Settings({
       return setPasswordFieldError('Password must contain an upper-case, lower-case, and digit character and be at least 6 characters long.');
     }
 
-    // TODO send AJAX request
+    syncSettings({ password: passwordFieldValue }, history, setUser, setSettings);
 
     setIsEditingPassword(false);
-  }, [passwordFieldValue]);
+  }, [history, passwordFieldValue, setSettings, setUser]);
 
   // city input field
   const handleCityValueChange = useCallback(event => {
@@ -104,28 +131,32 @@ export default function Settings({
 
   const handleCitySave = useCallback(() => {
     if (!isValidCityName(cityFieldValue)) {
-      return setCityFieldError('Password must contain an upper-case, lower-case, and digit character and be at least 6 characters long.');
+      return setCityFieldError('City name is not valid.');
     }
 
+    // TODO handle server responding with invalid city error message
+    syncSettings({ city: cityFieldValue }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setSettings(settings => ({
       ...settings,
       city: cityFieldValue,
     }));
 
-    // TODO send AJAX request
-
     setIsEditingCity(false);
-  }, [cityFieldValue, setSettings]);
+  }, [cityFieldValue, history, setSettings, setUser]);
 
   // email notification toggle
   const handleEmailNotificationToggle = useCallback(event => {
+    syncSettings({ receiveEmailNotifications: event.target.checked }, history, setUser, setSettings);
+
+    // update immediately, although server response will cause further sync update
     setSettings(settings => ({
       ...settings,
       receiveEmailNotifications: event.target.checked,
     }));
+  }, [history, setSettings, setUser]);
 
-    // TODO send AJAX request
-  }, [setSettings]);
 
   /* RENDER */
 

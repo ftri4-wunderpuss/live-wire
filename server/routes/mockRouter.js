@@ -99,8 +99,8 @@ userRouter.patch('/',
     if (req.body.name) userCache.name = req.body.name;
     if (req.body.email) userCache.email = req.body.email;
     if (req.body.password) userCache.password = req.body.password;
-    if (req.body.city) userCache.city = req.body.city;
-    if (req.body.receiveEmailNotifications) userCache.receiveEmailNotifications = req.body.receiveEmailNotifications;
+    if (req.body.city) settingCache.city = req.body.city;
+    if (req.body.receiveEmailNotifications !== undefined) settingCache.receiveEmailNotifications = req.body.receiveEmailNotifications;
 
     return res.json({
       user: userCache,
