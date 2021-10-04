@@ -47,7 +47,7 @@ userController.verifyUser = async (req, res, next) => {
   //set up query to get the stored hashed password for the email address that was entered
   const getUserInfo = `SELECT * FROM users WHERE email = ${email}`
   const userInfo = await db.query(getUserInfo);
-  const { passhash } = userInfo.rows //does this work to access the stored passhash? access based on index, rows is an array
+  const { passhash } = userInfo.rows;//does this work to access the stored passhash? access based on index, rows is an array
 
   //if email address does not exist in the database, throw error (email or password does not match)
   if (!passhash) return next('username or password does not match in userController.verifyUser')
@@ -58,17 +58,17 @@ userController.verifyUser = async (req, res, next) => {
     res.locals.user = userInfo.rows;
     return next();
   } else {
-    return next()
+    return next();
   }
-}
+};
 
 
 /**
  * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events. If successful, results are stored in res.locals.userObject.
  */
-userController.getUserInfo = async(req, res, next) {
+userController.getUserInfo = async(req, res, next) => {
   if (!res.locals.user) return next();
-  const { name, email, city, email_notification } = res.locals.user //TODO: console log to confirm the correct way to access these values
+  const { name, email, city, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
   //const followedArtists = await userModel.getFollowedArtists() (return array)
   //const starredEvents = await userModel.getStarredEvents() (return array)
 
@@ -77,9 +77,35 @@ userController.getUserInfo = async(req, res, next) {
     settings: Settings, 
     followedArtists: followedArtists, 
     starredEvents: starredEvents
-  }
+  };
   return next();
-}
+};
+
+
+userController.updateUser = async (req, res, next) => {
+  if(!res.locals.isLoggedIn) return next();
+  //TODO: define function in userModel file
+  if (req.body.name) res.locals.name = req.body.name;
+  if (req.body.email) res.locals.email = req.body.email;
+  if (req.body.password) res.locals.password = req.body.password;
+  if (req.body.city) res.locals.city = req.body.city;
+  if (req.body.email_notifications) res.locals.email_notifications = req.body.email_notifications;
+
+  // const user = await updateUser(...values);
+  // res.locals.user = user;
+  return next();
+};
+
+/**
+ * Middleware: Delete a user's information from the users table
+ */
+userController.deleteUser = async (req, res, next) => {
+  if(!res.locals.isLoggedIn) return next();
+  //TODO: define function in userModel file
+  //deleteUser();
+  return next();
+};
+
 
 
 module.exports = userController;

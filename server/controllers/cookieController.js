@@ -10,6 +10,15 @@ cookieController.setSIDCookie = (req, res, next) => {
   const { sid } = res.locals; //TODO: console log res.locals.session to determine how to access sid
   res.cookie('sid', sid, { httpOnly: true, sameSite: 'lax' });
   return next();
-}
+};
+
+cookieController.removeSIDCookie = async (req, res, next) => {
+  res.cookie(
+    'sid', 
+    'invalidate', 
+    { httpOnly: true, sameSite: 'lax', expires: new Date(Date.now() - 1000) }
+  );
+  return next();
+};
 
 module.exports = cookieController;

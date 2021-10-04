@@ -20,3 +20,7 @@ const getFollowedArtists = (userId) => {
 const getStarredEvents = (userId) => {
   //get starred events from database and store in an array by eventId
 }
+
+const deleteUser = (userId) => {
+  //DELETE FROM users WHERE _id = userId
+}
