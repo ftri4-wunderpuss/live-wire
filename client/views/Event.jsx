@@ -33,7 +33,7 @@ export default function Event({
         <ul>
           <li>Artist: {artistName}</li>
           <li>Venue: {venue}</li>
-          <li>Date & Time: {date.toLocaleString()}</li>
+          <li>Date & Time: {date.toLocaleDateString()}</li>
           <li>Ticket Price: {ticketPrice} USD</li>
         </ul>
       </div>

@@ -48,6 +48,9 @@ export default function Feed({
   /* SIDE EFFECTS */
 
   useEffect(() => {
+
+    // TODO trigger splash until this returns, to fix unfollow button not showing immediate feedback
+
     fetch('/api/events', {
       method: 'GET',
       headers: {
@@ -65,6 +68,29 @@ export default function Feed({
   }, [followedArtists]);
 
   /* RENDER */
+
+  // determine which events are starred and sort by starred events to top
+  const starredEventsList = [];
+  const notStarredEventsList = [];
+  if (events) events.forEach(event => {
+    event.date = new Date(event.date);
+    if (starredEvents.find(sE => sE === event.eventId) !== undefined) {
+      event.isStarred = true;
+      starredEventsList.push(event);
+    } else {
+      event.isStarred = false;
+      notStarredEventsList.push(event);
+    }
+  });
+  // filter by chronological order within each subgroup: star vs non-star
+  starredEventsList.sort((eA, eB) => {
+    console.log(eA.date);
+    console.log(eB.date);
+    return eA.date - eB.date;
+  });
+  notStarredEventsList.sort((eA, eB) => eA.date - eB.date);
+
+  const toRenderEventList = starredEventsList.concat(notStarredEventsList);
 
   return (
     <div id='feed'>
@@ -88,7 +114,7 @@ export default function Feed({
         (
           events.length === 0
             ? <NoEvents />
-            : events.map(eventInfo => {
+            : toRenderEventList.map(eventInfo => {
               const artistLineup = eventInfo.artists.map(artistItem => artistItem.artistName).join(', ');
 
               return <Event
@@ -100,7 +126,7 @@ export default function Feed({
                 venue={eventInfo.venue}
                 date={eventInfo.date}
                 ticketPrice={eventInfo.ticketPrice.toFixed(2)}
-                isStarred={starredEvents.find(sE => sE === eventInfo.eventId) !== undefined}
+                isStarred={eventInfo.isStarred}
                 removeArtist={removeArtist}
                 toggleIsStarred={() => toggleIsStarred(eventInfo.eventId)}
               />;
