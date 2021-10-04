@@ -29,7 +29,6 @@ userController.createUser = async (req, res, next) => {
     res.locals.user = newUser.rows;
     return next()
   } catch (err) {
-    console.error(err);
     next(err);
   }
 
@@ -53,9 +52,9 @@ userController.verifyUser = async (req, res, next) => {
   //if email address does not exist in the database, throw error (email or password does not match)
   if (!passhash) return next('username or password does not match in userController.verifyUser')
   //if email address does exist in the database, compare stored passhash to hashed version of password that was entered. It if doesn't match, redirect user to homepage with error message (frontend?)
-  const isValidPassword = await bcrypt.compare(password, passhash);
-  res.locals.isValidPassword = isValidPassword;
-  if(isValidPassword) {
+  const isCorrectPassword = await bcrypt.compare(password, passhash);
+  res.locals.isCorrectPassword = isCorrectPassword;
+  if(isCorrectPassword) {
     res.locals.user = userInfo.rows;
     return next();
   } else {

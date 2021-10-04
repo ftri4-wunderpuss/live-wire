@@ -1,12 +1,16 @@
-const sessionController = {};
 const db = require('../models/userModel'); //make sure this name matches the database name
+const sessionController = {};
+
 
 /**
- * Middleware: Verify user session based on cookies. If successful, res.locals.user_id will be set and isLoggedIn will be set to true
+ * Middleware: Verify user session based on cookies. If successful, isLoggedIn will be set to true
  */
 sessionController.isLoggedIn = async (req, res, next) => {
   const findSession = `SELECT * FROM sessions WHERE  = ${req.cookies.sid}`
   const session = await db.query(findSession);
+
+  //Good chance to use ternary operator
+  //will !session return truthy? make sure this works
   if (!session) {
     res.locals.isLoggedIn = false;
     return next(); 
@@ -14,7 +18,7 @@ sessionController.isLoggedIn = async (req, res, next) => {
     res.locals.isLoggedIn = true;
     return next();
   }
-}
+};
 
 
 /**
