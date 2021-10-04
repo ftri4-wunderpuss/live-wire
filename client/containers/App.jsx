@@ -41,6 +41,8 @@ export default function App() {
 
   /* ACTIONS */
 
+  // STRETCH debounce bellow functions in case of rapid user clicks.
+
   // login/signup actions
   const handleLoginRequest = useCallback((email, password) => {
     fetch('/login', {

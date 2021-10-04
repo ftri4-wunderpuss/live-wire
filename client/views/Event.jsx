@@ -3,6 +3,7 @@ import React from 'react';
 import './../sass/views/Event.scss';
 
 import UnfollowButton from './UnfollowButton.jsx';
+import Star from './Star.jsx';
 
 export default function Event({
   hasMultipleArtist,
@@ -21,9 +22,7 @@ export default function Event({
 
   return (
     <article className='event-item'>
-      <div className='event-star' onClick={toggleIsStarred}>
-        <span className={isStarred ? 'active-star' : ''}>&#9733;</span>
-      </div>
+      <Star isStarred={isStarred} toggleIsStarred={toggleIsStarred} />
       <header>
         <img
           src={eventImageUrl}
