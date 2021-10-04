@@ -15,6 +15,7 @@ export default function Feed({
   removeArtist,
   addEvent,
   removeEvent,
+  openLogoutModal,
 }) {
   /* STATE */
 
@@ -41,7 +42,7 @@ export default function Feed({
     } else {
       addEvent(eventId);
     }
-  }, [addEvent, removeEvent]);
+  }, [addEvent, removeEvent, starredEvents]);
 
   /* SIDE EFFECTS */
 
@@ -54,6 +55,7 @@ export default function Feed({
       <NavBar
         searchValue={searchValue}
         setSearchValue={setSearchValue}
+        openLogoutModal={openLogoutModal}
       />
       <EventFilters
         locationFilterValue={locationFilterValue}

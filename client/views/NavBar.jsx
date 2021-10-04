@@ -4,7 +4,8 @@ import './../sass/views/NavBar.scss';
 
 export default function NavBar({
   searchValue,
-  setSearchValue
+  setSearchValue,
+  openLogoutModal
 }) {
   const onChange = useCallback(event => {
     setSearchValue(event.target.value);
@@ -17,7 +18,7 @@ export default function NavBar({
       <nav>
         <ul>
           <li>Account</li>
-          <li>Logout</li>
+          <li onClick={openLogoutModal}>Logout</li>
         </ul>
       </nav>
     </div>

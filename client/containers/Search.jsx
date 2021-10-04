@@ -12,7 +12,8 @@ export default function Search({
   searchValue,
   setSearchValue,
   addArtist,
-  removeArtist
+  removeArtist,
+  openLogoutModal
 }) {
   /* STATE */
 
@@ -26,7 +27,11 @@ export default function Search({
 
   return (
     <div id="search">
-      <NavBar searchValue={searchValue} setSearchValue={setSearchValue} />
+      <NavBar
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        openLogoutModal={openLogoutModal}
+      />
       {artists === undefined && <Splash />}
       {artists && (
         artists.length === 0
