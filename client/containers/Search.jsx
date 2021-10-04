@@ -22,20 +22,22 @@ export default function Search({
   /* SIDE EFFECTS */
 
   useEffect(() => {
-    fetch('/api/artists/' + searchValue, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    }).then(async response => {
-      const body = await response.json();
+    if (searchValue.length > 0) {
+      fetch('/api/artists/' + searchValue, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }).then(async response => {
+        const body = await response.json();
 
-      setArtists(body.artists);
-    }).catch(error => {
-      console.error(error);
-      alert(error); // todo remove 
-    });
+        setArtists(body.artists);
+      }).catch(error => {
+        console.error(error);
+        alert(error); // todo remove 
+      });
+    }
   }, [searchValue]);
 
   /* RENDER */

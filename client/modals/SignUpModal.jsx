@@ -75,6 +75,8 @@ export default function SignUpModal({
       fullScreen={fullScreen}
       open={isOpen}
       aria-labelledby="responsive-dialog-title"
+      fullWidth
+      maxWidth='xs'
     >
       <DialogTitle id="responsive-dialog-title">
         Sign Up
@@ -91,9 +93,7 @@ export default function SignUpModal({
           component="form"
           noValidate
           autoComplete="off"
-          sx={{
-            width: 400,
-          }}
+          fullWidth
           spacing={3}
         >
 
