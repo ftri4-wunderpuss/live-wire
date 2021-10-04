@@ -2,6 +2,11 @@ import React, { useCallback, useState } from 'react';
 
 import './../sass/containers/Settings.scss';
 
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+
+
 import UnfollowButton from './../views/UnfollowButton.jsx';
 import EditButton from './../views/EditButton.jsx';
 import SettingEditField from '../views/SettingEditField.jsx';
@@ -125,86 +130,118 @@ export default function Settings({
   /* RENDER */
 
   return (
-    <div id='settings'>
-      <div id='account-settings'>
-        <ul>
-          {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
-          {isEditingName && <li>
-            <SettingEditField
-              value={nameFieldValue}
-              onChange={handleNameValueChange}
-              handleEnterKeydown={handleNameSave}
-              errorMessage={nameFieldError}
-            />
-          </li>}
-
-          {!isEditingEmail && <li>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></li>}
-          {isEditingEmail && <li>
-            <SettingEditField
-              value={emailFieldValue}
-              onChange={handleEmailValueChange}
-              handleEnterKeydown={handleEmailSave}
-              errorMessage={emailFieldError}
-            />
-          </li>}
-
-          {!isEditingPassword && <li onClick={() => setIsEditingPassword(true)}><a>Change password?</a></li>}
-          {isEditingPassword && <li>
-            <SettingEditField
-              value={passwordFieldValue}
-              onChange={handlePasswordValueChange}
-              handleEnterKeydown={handlePasswordSave}
-              errorMessage={passwordFieldError}
-            />
-          </li>}
-        </ul>
-      </div>
-
-      <div id='filter-settings'>
-        <ul>
-          {!isEditingCity && <li>{settings.city} <EditButton onClick={() => setIsEditingCity(true)} /></li>}
-          {isEditingCity && <li>
-            <SettingEditField
-              value={cityFieldValue}
-              onChange={handleCityValueChange}
-              handleEnterKeydown={handleCitySave}
-              errorMessage={cityFieldError}
-            />
-          </li>}
-        </ul>
-      </div>
-
-      <div id='notification-settings'>
-        <ul>
-          <li>
-            <input
-              type="checkbox"
-              id="email-notification"
-              name="email-notification"
-              checked={settings.receiveEmailNotifications}
-              onChange={handleEmailNotificationToggle}
-            />
-            <label htmlFor="email-notification">Email Notification</label>
-          </li>
-          {/* STRETCH setup browser notifications */}
-          <li><a>Activate Browser Notifications</a></li>
-        </ul>
-      </div>
-
-      <div id='followed-artist-settings'>
-        <ul>
-          {followedArtists.map(artistListItem => (
-            <li key={artistListItem.artistName}>
-              {artistListItem.artistName}
-              <UnfollowButton
-                onClick={() => removeArtist(artistListItem.artistId)}
+    <Container maxWidth="sm">
+      <Stack
+        id='settings'
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        spacing={3}
+      >
+        <Paper
+          id='account-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
+            {isEditingName && <li>
+              <SettingEditField
+                id="name-input-field"
+                placeholder="Name"
+                value={nameFieldValue}
+                onChange={handleNameValueChange}
+                handleEnterKeydown={handleNameSave}
+                errorMessage={nameFieldError}
               />
-            </li>
-          ))}
-        </ul>
-      </div>
+            </li>}
 
-      {/* TODO add delete account component and hooks */}
-    </div>
+            {!isEditingEmail && <li>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></li>}
+            {isEditingEmail && <li>
+              <SettingEditField
+                id="email-input-field"
+                placeholder="Email"
+                value={emailFieldValue}
+                onChange={handleEmailValueChange}
+                handleEnterKeydown={handleEmailSave}
+                errorMessage={emailFieldError}
+              />
+            </li>}
+
+            {!isEditingPassword && <li onClick={() => setIsEditingPassword(true)}><a>Change password?</a></li>}
+            {isEditingPassword && <li>
+              <SettingEditField
+                id="password-input-field"
+                placeholder="Password"
+                value={passwordFieldValue}
+                onChange={handlePasswordValueChange}
+                handleEnterKeydown={handlePasswordSave}
+                errorMessage={passwordFieldError}
+              />
+            </li>}
+          </ul>
+        </Paper>
+
+        <Paper
+          id='filter-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {!isEditingCity && <li>{settings.city} <EditButton onClick={() => setIsEditingCity(true)} /></li>}
+            {isEditingCity && <li>
+              <SettingEditField
+                id="city-input-field"
+                placeholder="Home City"
+                value={cityFieldValue}
+                onChange={handleCityValueChange}
+                handleEnterKeydown={handleCitySave}
+                errorMessage={cityFieldError}
+              />
+            </li>}
+          </ul>
+        </Paper>
+
+        <Paper
+          id='notification-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            <li>
+              <input
+                type="checkbox"
+                id="email-notification"
+                name="email-notification"
+                checked={settings.receiveEmailNotifications}
+                onChange={handleEmailNotificationToggle}
+              />
+              <label htmlFor="email-notification">Email Notification</label>
+            </li>
+            {/* STRETCH setup browser notifications */}
+            <li><a>Activate Browser Notifications</a></li>
+          </ul>
+        </Paper>
+
+        <Paper
+          id='followed-artist-settings'
+          elevation={6}
+          sx={{ width: 400 }}
+        >
+          <ul>
+            {followedArtists.map(artistListItem => (
+              <li key={artistListItem.artistName}>
+                {artistListItem.artistName}
+                <UnfollowButton
+                  onClick={() => removeArtist({ artistId: artistListItem.artistId, artistName: artistListItem.artistName })}
+                />
+              </li>
+            ))}
+          </ul>
+        </Paper>
+
+        {/* TODO add delete account component and hooks */}
+      </Stack>
+    </Container>
   );
 }

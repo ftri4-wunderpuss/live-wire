@@ -2,7 +2,14 @@ import React, { useCallback } from 'react';
 
 import './../sass/views/SettingEditField.scss';
 
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+
 export default function SettingEditField({
+  id,
+  placeholder,
   value,
   onChange,
   handleEnterKeydown,
@@ -17,9 +24,19 @@ export default function SettingEditField({
   }, [handleEnterKeydown]);
 
   return (
-    <div className='setting-edit-field'>
-      {errorMessage && <p className='setting-edit-field-error'>{errorMessage}</p>}
-      <input type='text' value={value} onChange={onChange} onKeyPress={handleKeyPress} />
-    </div>
+    <FormControl
+      error={errorMessage.length > 0}
+      variant="standard"
+    >
+      <InputLabel htmlFor={id}>{placeholder}</InputLabel>
+      <Input
+        id={id}
+        aria-describedby={id + "-error-text"}
+        value={value}
+        onChange={onChange}
+        onKeyPress={handleKeyPress}
+      />
+      {errorMessage.length > 0 && <FormHelperText id={id + "-error-text"}>{errorMessage}</FormHelperText>}
+    </FormControl>
   );
 }
