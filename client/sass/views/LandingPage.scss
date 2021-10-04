@@ -1,0 +1,25 @@
+@import "./../config.scss";
+
+$promo-text-width: 400px;
+
+#landing-page {
+  position: absolute;
+  top: 40%;
+  left: calc(50% - ($app-max-width / 2) + ($promo-text-width / 2));
+
+  display: flex;
+  justify-content: center;
+
+  #promo-text {
+    flex-grow: 1;
+    max-width: $promo-text-width;
+    padding: 50px;
+  }
+}
+
+@media (max-width: 560px) {
+  #landing-page {
+    position: initial;
+    margin-top: 100px;
+  }
+}

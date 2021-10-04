@@ -1,9 +1,11 @@
+@import "./config.scss";
+
 body {
   background-color: lighten(black, 60%);
 }
 
 #root {
-  max-width: 900px;
+  max-width: $app-max-width;
   margin: 0 auto;
 }
 
