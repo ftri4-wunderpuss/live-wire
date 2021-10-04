@@ -1,11 +1,13 @@
 @import "./../config.scss";
 
-$promo-text-width: 400px;
+$promo-text-width: 460px;
+$promo-text-padding: 50px;
+$promo-text-full-width: $promo-text-width + $promo-text-padding * 2;
 
 #landing-page {
   position: absolute;
   top: 40%;
-  left: calc(50% - ($app-max-width / 2) + ($promo-text-width / 2));
+  left: calc(50% - ($promo-text-full-width / 2));
 
   display: flex;
   justify-content: center;
@@ -13,13 +15,24 @@ $promo-text-width: 400px;
   #promo-text {
     flex-grow: 1;
     max-width: $promo-text-width;
-    padding: 50px;
+    padding: $promo-text-padding;
   }
 }
+
+// TODO These need to be protected with specificity
+/*
+h2 {
+  text-align: center;
+}
+
+h4 {
+  text-align: center;
+}
+*/
 
 @media (max-width: 560px) {
   #landing-page {
     position: initial;
-    margin-top: 100px;
+    margin-top: 140px;
   }
 }

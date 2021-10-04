@@ -16,7 +16,7 @@ export default function GuestNavBar({
       <AppBar position="static">
         <Toolbar>
           {/* TODO <img alt='page logo' /> */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h3" component="div" sx={{ flexGrow: 1 }} color='secondary.dark'>
             Live Wire
           </Typography>
           <Button color="inherit" onClick={openLoginModal}>Login</Button>

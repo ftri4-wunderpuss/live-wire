@@ -79,12 +79,23 @@ export default function NavBar({
     if (history.location.pathname !== '/account') history.push('/account');
   }, [history]);
 
+  const navigateToFeed = useCallback(() => {
+    if (history.location.pathname !== '/feed') history.push('/feed');
+  }, [history]);
+
   return (
     <div id='nav-bar'>
       <AppBar position="static">
         <Toolbar>
           {/* TODO <img alt='page logo' /> */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, minWidth: 100 }}>
+          <Typography
+            id='nav-bar-logo'
+            variant="h4"
+            component="div"
+            sx={{ flexGrow: 1, minWidth: 100 }}
+            color='secondary.dark'
+            onClick={navigateToFeed}
+          >
             Live Wire
           </Typography>
           <Search>
