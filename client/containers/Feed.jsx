@@ -21,6 +21,7 @@ export default function Feed({
   openLogoutModal,
 }) {
   /* STATE */
+  const [toFromDates, setToFromDates] = useState([null, null]);
 
   // Event controlled state
   const [events, setEvents] = useState(undefined); // undefined if no AJAX request, empty is no events exist
@@ -71,10 +72,16 @@ export default function Feed({
 
   /* RENDER */
 
+  // filter by dates
+  const [to, from] = toFromDates;
+  const timeFilteredEvents = (to && from)
+    ? events.filter(e => e.date > to && e.date < from)
+    : events;
+
   // determine which events are starred and sort by starred events to top
   const starredEventsList = [];
   const notStarredEventsList = [];
-  if (events) events.forEach(event => {
+  if (events) timeFilteredEvents.forEach(event => {
     event.date = new Date(event.date);
     if (starredEvents.find(sE => sE === event.eventId) !== undefined) {
       event.isStarred = true;
@@ -84,6 +91,7 @@ export default function Feed({
       notStarredEventsList.push(event);
     }
   });
+
   // filter by chronological order within each subgroup: star vs non-star
   starredEventsList.sort((eA, eB) => {
     console.log(eA.date);
@@ -110,6 +118,8 @@ export default function Feed({
         setLocationFilterValue={setLocationFilterValue}
         setDateFromFilterValue={setDateFromFilterValue}
         setDateToFilterValue={setDateToFilterValue}
+        toFromDates={toFromDates}
+        setToFromDates={setToFromDates}
       />
       {events === undefined && <Splash />}
       {events &&

@@ -11,17 +11,13 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 export default function EventFilters({
   locationFilterValue,
-  dateFromFilterValue,
-  dateToFilterValue,
   showStarredEvents,
   toggleShowStarredEvents,
   setLocationFilterValue,
-  setDateFromFilterValue,
-  setDateToFilterValue,
+  toFromDates,
+  setToFromDates,
 }) {
-
-  const [value, setValue] = React.useState([null, null]);
-
+  /*
   const onLocationFilterChange = useCallback(event => {
     setLocationFilterValue(event.target.value);
   }, [setLocationFilterValue]);
@@ -33,6 +29,11 @@ export default function EventFilters({
   const onDateToFilterChange = useCallback(event => {
     setDateToFilterValue(event.target.value);
   }, [setDateToFilterValue]);
+  */
+
+  const onDateRangeChange = useCallback((newDateRange) => {
+    setToFromDates(newDateRange);
+  }, [setToFromDates]);
 
   // TODO actually sort by date rangers
   // TODO fix styling of search fields
@@ -45,10 +46,8 @@ export default function EventFilters({
         <DateRangePicker
           startText="From"
           endText="To"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
+          value={toFromDates}
+          onChange={onDateRangeChange}
           renderInput={(startProps, endProps) => (
             <React.Fragment>
               <TextField {...startProps} size="small" />
