@@ -38,6 +38,7 @@ loginRouter.post('/',
     };
     followedArtistsCache = [
       { artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: 'Drake White' },
+      { artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: 'Jared Drake Bell' },
     ];
     starredEventsCache = ["vvG1bZpmT72SPV"];
 
@@ -53,7 +54,7 @@ loginRouter.post('/',
 //  logout 
 logoutRouter.post('/',
   (req, res) => {
-    return removeSession(res, 200).sendStatus(200);
+    return removeSession(res, 200).json({});
   }
 );
 
@@ -129,38 +130,40 @@ eventsRouter.get("/",
       error: 'Unauthorized access.'
     });
 
-    res.json([
-      {
-        eventId: "vvG1fZpRZbsSL5",
-        eventUrl: "https://www.ticketmaster.com/drake-white-indianapolis-indiana-11-12-2021/event/05005AF018C737CB",
-        artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        venue: "8 Seconds Saloon, Indianapolis",
-        date: "2021-11-13T01:45:00Z",
-        ticketPrice: 20,
-      },
-      {
-        eventId: "vv1AaZA-fGkdJH499",
-        eventUrl: "https://www.ticketmaster.com/drake-bell-montclair-california-10-07-2021/event/09005854E6F155D7",
-        artists: [{ artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: "Drake Bell" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
-        venue: "The Canyon Montclair, Montclair",
-        date: "2021-10-08T03:00:00Z",
-        ticketPrice: 40,
-      },
-      {
-        eventId: "vvG1bZpmT72SPV",
-        eventUrl: "https://www.ticketmaster.com/drake-white-saint-louis-missouri-10-08-2021/event/06005AEFC43F3974",
-        artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        venue: "Delmar Hall, Saint Louis",
-        date: "2021-10-09T01:00:00Z",
-        ticketPrice: 25,
-      },
-    ]);
+    res.json({
+      events: [
+        {
+          eventId: "vvG1fZpRZbsSL5",
+          eventUrl: "https://www.ticketmaster.com/drake-white-indianapolis-indiana-11-12-2021/event/05005AF018C737CB",
+          artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          venue: "8 Seconds Saloon, Indianapolis",
+          date: "2021-11-13T01:45:00Z",
+          ticketPrice: 20,
+        },
+        {
+          eventId: "vv1AaZA-fGkdJH499",
+          eventUrl: "https://www.ticketmaster.com/drake-bell-montclair-california-10-07-2021/event/09005854E6F155D7",
+          artists: [{ artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: "Drake Bell" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
+          venue: "The Canyon Montclair, Montclair",
+          date: "2021-10-08T03:00:00Z",
+          ticketPrice: 40,
+        },
+        {
+          eventId: "vvG1bZpmT72SPV",
+          eventUrl: "https://www.ticketmaster.com/drake-white-saint-louis-missouri-10-08-2021/event/06005AEFC43F3974",
+          artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          venue: "Delmar Hall, Saint Louis",
+          date: "2021-10-09T01:00:00Z",
+          ticketPrice: 25,
+        },
+      ]
+    });
   }
 );
 
@@ -204,22 +207,24 @@ artistsRouter.get('/:term',
       error: 'Unauthorized access.'
     });
 
-    res.json([
-      {
-        artistId: "3450511f-aea9-40cd-9618-d26ca7495842",
-        artistName: "Drake White",
-        artistBio: "William Drake White (born October 3, 1983) is an American country music singer.",
-        artistImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        isOnTour: true,
-      },
-      {
-        artistId: "094f10e7-27d5-400d-a145-331013e67229",
-        artistName: "Jared Drake Bell",
-        artistBio: "Jared Drake Bell (born June 27, 1986), also known as Drake Campana, is an American actor, singer, songwriter, and musician. Born in Newport Beach, California, he began his career as an actor in the early 1990s at the age of five with his first televised appearance on Home Improvement, and also appeared in several commercials as a child. Bell is best known for his starring roles on Nickelodeon's The Amanda Show and Drake & Josh. He also starred in a trilogy of The Fairly OddParents movies on Nickelodeon. Bell was the voice of Peter Parker / Spider-Man in the animated series Ultimate Spider-Man on Disney XD.",
-        artistImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
-        isOnTour: true,
-      }
-    ]);
+    res.json({
+      artists: [
+        {
+          artistId: "3450511f-aea9-40cd-9618-d26ca7495842",
+          artistName: "Drake White",
+          artistBio: "William Drake White (born October 3, 1983) is an American country music singer.",
+          artistImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          isOnTour: true,
+        },
+        {
+          artistId: "094f10e7-27d5-400d-a145-331013e67229",
+          artistName: "Jared Drake Bell",
+          artistBio: "Jared Drake Bell (born June 27, 1986), also known as Drake Campana, is an American actor, singer, songwriter, and musician. Born in Newport Beach, California, he began his career as an actor in the early 1990s at the age of five with his first televised appearance on Home Improvement, and also appeared in several commercials as a child. Bell is best known for his starring roles on Nickelodeon's The Amanda Show and Drake & Josh. He also starred in a trilogy of The Fairly OddParents movies on Nickelodeon. Bell was the voice of Peter Parker / Spider-Man in the animated series Ultimate Spider-Man on Disney XD.",
+          artistImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
+          isOnTour: true,
+        }
+      ]
+    });
   }
 );
 

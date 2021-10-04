@@ -6,6 +6,7 @@ import UnfollowButton from './UnfollowButton.jsx';
 
 export default function Event({
   hasMultipleArtist,
+  artistId,
   artistName,
   eventImageUrl,
   venue,
@@ -15,6 +16,9 @@ export default function Event({
   removeArtist,
   toggleIsStarred
 }) {
+
+  // TODO useCallback for unfollow onClick
+
   return (
     <article className='event-item'>
       <div className='event-star' onClick={toggleIsStarred}>
@@ -36,7 +40,7 @@ export default function Event({
       </div>
       {!hasMultipleArtist &&
         <div className='event-footer'>
-          <UnfollowButton onClick={removeArtist} />
+          <UnfollowButton onClick={() => removeArtist({ artistId, artistName })} />
         </div>
       }
     </article>
