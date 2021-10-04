@@ -15,6 +15,9 @@ export default function Artist({
   addArtist,
   removeArtist
 }) {
+
+  // TODO add useCallback for onCLick of follow and unfollow
+
   return (
     <article className="artist-item">
       <header>
@@ -28,8 +31,8 @@ export default function Artist({
         <div className='artist-on-tour'>
           <p>On Tour? {artistIsOnTour ? 'Yes' : 'No'}</p>
         </div>
-        {isFollowed && <UnfollowButton onClick={addArtist(artistId)} />}
-        {!isFollowed && <FollowButton onClick={removeArtist(artistId)} />}
+        {isFollowed && <UnfollowButton onClick={() => removeArtist({ artistId, artistName })} />}
+        {!isFollowed && <FollowButton onClick={() => addArtist({ artistId, artistName })} />}
       </div>
     </article>
   );

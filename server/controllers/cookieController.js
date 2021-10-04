@@ -11,6 +11,7 @@ cookieController.setSIDCookie = (req, res, next) => {
   res.cookie('sid', sid, { httpOnly: true, sameSite: 'lax' });
   return next();
 };
+<<<<<<< HEAD
 
 cookieController.removeSIDCookie = async (req, res, next) => {
   res.cookie(
@@ -20,5 +21,7 @@ cookieController.removeSIDCookie = async (req, res, next) => {
   );
   return next();
 };
+=======
+>>>>>>> d9dd5e64783c6478ef0189fa144bc367c899a825
 
 module.exports = cookieController;

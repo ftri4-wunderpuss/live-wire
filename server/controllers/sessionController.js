@@ -37,7 +37,10 @@ sessionController.startSession = async (req, res, next) => {
   res.locals.sid = sid;
   return next();
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> d9dd5e64783c6478ef0189fa144bc367c899a825
 
 sessionController.removeSession = async (req, res, next) => {
   if (!res.locals.isLoggedIn) return next();
@@ -49,5 +52,11 @@ sessionController.removeSession = async (req, res, next) => {
   return next();
 };
 
+<<<<<<< HEAD
+=======
+sessionController.endSession = async (req, res, next) => {
+  //TODO: add logout functionality here
+};
+>>>>>>> d9dd5e64783c6478ef0189fa144bc367c899a825
 
 module.exports = sessionController;

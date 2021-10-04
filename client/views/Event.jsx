@@ -3,9 +3,11 @@ import React from 'react';
 import './../sass/views/Event.scss';
 
 import UnfollowButton from './UnfollowButton.jsx';
+import Star from './Star.jsx';
 
 export default function Event({
   hasMultipleArtist,
+  artistId,
   artistName,
   eventImageUrl,
   venue,
@@ -15,11 +17,12 @@ export default function Event({
   removeArtist,
   toggleIsStarred
 }) {
+
+  // TODO useCallback for unfollow onClick
+
   return (
     <article className='event-item'>
-      <div className='event-star' onClick={toggleIsStarred}>
-        <span className={isStarred ? 'active-star' : ''}>&#9733;</span>
-      </div>
+      <Star isStarred={isStarred} toggleIsStarred={toggleIsStarred} />
       <header>
         <img
           src={eventImageUrl}
@@ -36,7 +39,7 @@ export default function Event({
       </div>
       {!hasMultipleArtist &&
         <div className='event-footer'>
-          <UnfollowButton onClick={removeArtist} />
+          <UnfollowButton onClick={() => removeArtist({ artistId, artistName })} />
         </div>
       }
     </article>

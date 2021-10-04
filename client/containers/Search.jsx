@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './../sass/containers/Search.scss';
 
@@ -21,7 +21,24 @@ export default function Search({
 
   /* SIDE EFFECTS */
 
-  /* TODO useEffect queries API, creates aritstInfo object */
+  useEffect(() => {
+    if (searchValue.length > 0) {
+      fetch('/api/artists/' + searchValue, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      }).then(async response => {
+        const body = await response.json();
+
+        setArtists(body.artists);
+      }).catch(error => {
+        console.error(error);
+        alert(error); // todo remove 
+      });
+    }
+  }, [searchValue]);
 
   /* RENDER */
 
@@ -44,7 +61,7 @@ export default function Search({
               artistBio={artistInfo.artistBio}
               artistImageURL={artistInfo.artistImageURL}
               artistIsOnTour={artistInfo.artistIsOnTour}
-              isFollowed={followedArtists.find(artistInfo.artistId) !== undefined}
+              isFollowed={followedArtists.find(fA => fA.artistId === artistInfo.artistId) !== undefined}
               addArtist={addArtist}
               removeArtist={removeArtist}
             ></Artist>

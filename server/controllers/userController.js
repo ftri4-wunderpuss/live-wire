@@ -11,7 +11,7 @@ userController.createUser = async (req, res, next) => {
   try {
     const { name, email, password, city, email_notification } = req.body;
     const last_login = new Date();
-    const last_login_ip = req.headers['x-forwarded-for'] || req.ip ;
+    const last_login_ip = req.headers['x-forwarded-for'] || req.ip;
     //TODO add time 
     if (!email || !password) return next('Missing email address or password in userController.createUser');
     // TODO validate user inputs (check that email is correct format, validate name, check that email_notification is a boolean)
@@ -56,7 +56,7 @@ userController.verifyUser = async (req, res, next) => {
   //if email address does exist in the database, compare stored passhash to hashed version of password that was entered. It if doesn't match, redirect user to homepage with error message (frontend?)
   const isCorrectPassword = await bcrypt.compare(password, passhash);
   res.locals.isCorrectPassword = isCorrectPassword;
-  if(isCorrectPassword) {
+  if (isCorrectPassword) {
     res.locals.user = userInfo.rows;
     return next();
   } else {

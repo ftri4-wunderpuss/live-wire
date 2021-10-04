@@ -1,18 +1,21 @@
 import React from 'react';
 
 import './../sass/views/UnfollowButton.scss';
-import removeIconUrl from './../assets/icons/remove_circle_outline_black_24dp.svg';
+
+import Button from '@mui/material/Button';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 export default function UnfollowButton({
   onClick
 }) {
   return (
-    <button
+    <Button
       className='unfollow-button'
       type='button'
       onClick={onClick}
-    >
-      Unfollow <img src={removeIconUrl} alt='remove artist icon' />
-    </button>
+      variant="outlined"
+      size="small"
+      endIcon={<RemoveCircleIcon />}
+    >Unfollow</Button>
   );
 }

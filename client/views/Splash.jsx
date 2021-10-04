@@ -1,8 +1,14 @@
 import React from 'react';
 
+import './../sass/views/Splash.scss';
+
+import LinearProgress from '@mui/material/LinearProgress';
+
 export default function Splash() {
-  // TODO change to an animation
+  // TODO change to an animation of a metronome!
   return (
-    <h2>Loading TODO change to animation--metronome!</h2>
+    <div className="splash">
+      <LinearProgress sx={{ width: '80%' }} />
+    </div>
   );
 }
