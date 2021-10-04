@@ -20,17 +20,58 @@
     "Express",
     "SQL"
   ],
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended"
+    ],
+    "env": {
+      "es2021": true,
+      "node": true,
+      "jest": true,
+      "browser": true
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": [
+      "react"
+    ],
+    "rules": {
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "react/prop-types": "off",
+      "semi": "error"
+    }
+  },
   "author": "Miguel Hernandez (miguelh72@outlook.com)",
   "bugs": {
     "url": "https://github.com/ftri4-wunderpuss/scratch-project/issues"
   },
   "homepage": "https://github.com/ftri4-wunderpuss/scratch-project#readme",
   "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.1",
+    "@mui/material": "^5.0.2",
     "@reduxjs/toolkit": "^1.6.1",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "normalize.css": "^8.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-redux": "^7.2.5"
+    "react-redux": "^7.2.5",
+    "react-router-dom": "^5.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.6",
@@ -41,6 +82,7 @@
     "css-loader": "^6.3.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "image-webpack-loader": "^8.0.1",
