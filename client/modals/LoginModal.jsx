@@ -54,6 +54,8 @@ export default function LoginModal({
       fullScreen={fullScreen}
       open={isOpen}
       aria-labelledby="responsive-dialog-title"
+      fullWidth
+      maxWidth='xs'
     >
       <DialogTitle id="responsive-dialog-title">
         Login
@@ -70,7 +72,7 @@ export default function LoginModal({
           noValidate
           autoComplete="off"
           sx={{
-            width: 300,
+            maxWidth: 360,
           }}
           spacing={2}
         >

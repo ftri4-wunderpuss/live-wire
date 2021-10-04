@@ -1,18 +1,20 @@
 import React from 'react';
 
-import './../sass/views/FollowButton.scss';
-import followIconUrl from './../assets/icons/add_circle_outline_black_24dp.svg';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function FollowButton({
   onClick
 }) {
   return (
-    <button
+    <Button
       className='follow-button'
       type='button'
       onClick={onClick}
-    >
-      Follow <img src={followIconUrl} alt='follow artist icon' />
-    </button>
+      variant="outlined"
+      size="small"
+      endIcon={<AddCircleIcon />}
+      color='success'
+    >Follow</Button>
   );
 }
