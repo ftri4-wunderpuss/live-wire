@@ -22,10 +22,6 @@ export default function EventFilters({
 
   const [value, setValue] = React.useState([null, null]);
 
-
-  console.log({ value }); // ! remove
-
-
   const onLocationFilterChange = useCallback(event => {
     setLocationFilterValue(event.target.value);
   }, [setLocationFilterValue]);
@@ -54,9 +50,7 @@ export default function EventFilters({
             setValue(newValue);
           }}
           renderInput={(startProps, endProps) => (
-            <React.Fragment
-              id='date-range'
-            >
+            <React.Fragment>
               <TextField {...startProps} />
               <TextField {...endProps} />
             </React.Fragment>

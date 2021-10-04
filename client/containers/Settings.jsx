@@ -3,9 +3,7 @@ import React, { useCallback, useState } from 'react';
 import './../sass/containers/Settings.scss';
 
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
-
+import Typography from '@mui/material/Typography';
 
 import UnfollowButton from './../views/UnfollowButton.jsx';
 import EditButton from './../views/EditButton.jsx';
@@ -161,118 +159,85 @@ export default function Settings({
   /* RENDER */
 
   return (
-    <Container maxWidth="sm">
-      <Stack
-        id='settings'
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        spacing={3}
-      >
-        <Paper
-          id='account-settings'
-          elevation={6}
-          sx={{ width: 400 }}
-        >
-          <ul>
-            {!isEditingName && <li>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></li>}
-            {isEditingName && <li>
-              <SettingEditField
-                id="name-input-field"
-                placeholder="Name"
-                value={nameFieldValue}
-                onChange={handleNameValueChange}
-                handleEnterKeydown={handleNameSave}
-                errorMessage={nameFieldError}
-              />
-            </li>}
+    <Paper id='settings'>
+      <Typography mb={2} variant="h4" component="h3">
+        Account Settings
+      </Typography>
 
-            {!isEditingEmail && <li>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></li>}
-            {isEditingEmail && <li>
-              <SettingEditField
-                id="email-input-field"
-                placeholder="Email"
-                value={emailFieldValue}
-                onChange={handleEmailValueChange}
-                handleEnterKeydown={handleEmailSave}
-                errorMessage={emailFieldError}
-              />
-            </li>}
+      {!isEditingName && <Typography mb={2}>{user.name} <EditButton onClick={() => setIsEditingName(true)} /></Typography>}
+      {isEditingName && <SettingEditField
+        id="name-input-field"
+        placeholder="Name"
+        value={nameFieldValue}
+        onChange={handleNameValueChange}
+        handleEnterKeydown={handleNameSave}
+        errorMessage={nameFieldError}
+      />}
 
-            {!isEditingPassword && <li onClick={() => setIsEditingPassword(true)}><a>Change password?</a></li>}
-            {isEditingPassword && <li>
-              <SettingEditField
-                id="password-input-field"
-                placeholder="Password"
-                value={passwordFieldValue}
-                onChange={handlePasswordValueChange}
-                handleEnterKeydown={handlePasswordSave}
-                errorMessage={passwordFieldError}
-              />
-            </li>}
-          </ul>
-        </Paper>
+      {!isEditingEmail && <Typography mb={2}>{user.email} <EditButton onClick={() => setIsEditingEmail(true)} /></Typography>}
+      {isEditingEmail && <SettingEditField
+        id="email-input-field"
+        placeholder="Email"
+        value={emailFieldValue}
+        onChange={handleEmailValueChange}
+        handleEnterKeydown={handleEmailSave}
+        errorMessage={emailFieldError}
+      />}
 
-        <Paper
-          id='filter-settings'
-          elevation={6}
-          sx={{ width: 400 }}
-        >
-          <ul>
-            {!isEditingCity && <li>{settings.city} <EditButton onClick={() => setIsEditingCity(true)} /></li>}
-            {isEditingCity && <li>
-              <SettingEditField
-                id="city-input-field"
-                placeholder="Home City"
-                value={cityFieldValue}
-                onChange={handleCityValueChange}
-                handleEnterKeydown={handleCitySave}
-                errorMessage={cityFieldError}
-              />
-            </li>}
-          </ul>
-        </Paper>
+      {!isEditingPassword && <Typography mb={2} onClick={() => setIsEditingPassword(true)}>Change password?</Typography>}
+      {isEditingPassword && <SettingEditField
+        id="password-input-field"
+        placeholder="Password"
+        value={passwordFieldValue}
+        onChange={handlePasswordValueChange}
+        handleEnterKeydown={handlePasswordSave}
+        errorMessage={passwordFieldError}
+      />}
 
-        <Paper
-          id='notification-settings'
-          elevation={6}
-          sx={{ width: 400 }}
-        >
-          <ul>
-            <li>
-              <input
-                type="checkbox"
-                id="email-notification"
-                name="email-notification"
-                checked={settings.receiveEmailNotifications}
-                onChange={handleEmailNotificationToggle}
-              />
-              <label htmlFor="email-notification">Email Notification</label>
-            </li>
-            {/* STRETCH setup browser notifications */}
-            <li><a>Activate Browser Notifications</a></li>
-          </ul>
-        </Paper>
+      <Typography mt={8} variant="h4" component="h3" mb={2}>
+        Filters
+      </Typography>
 
-        <Paper
-          id='followed-artist-settings'
-          elevation={6}
-          sx={{ width: 400 }}
-        >
-          <ul>
-            {followedArtists.map(artistListItem => (
-              <li key={artistListItem.artistName}>
-                {artistListItem.artistName}
-                <UnfollowButton
-                  onClick={() => removeArtist({ artistId: artistListItem.artistId, artistName: artistListItem.artistName })}
-                />
-              </li>
-            ))}
-          </ul>
-        </Paper>
+      {!isEditingCity && <Typography mb={2}>{settings.city}<EditButton onClick={() => setIsEditingCity(true)} /></Typography>}
+      {isEditingCity && <SettingEditField
+        id="city-input-field"
+        placeholder="Home City"
+        value={cityFieldValue}
+        onChange={handleCityValueChange}
+        handleEnterKeydown={handleCitySave}
+        errorMessage={cityFieldError}
+      />}
 
-        {/* TODO add delete account component and hooks */}
-      </Stack>
-    </Container>
+      <Typography mt={8} mb={2} variant="h4" component="h3">
+        Notifications
+      </Typography>
+
+      <input
+        type="checkbox"
+        id="email-notification"
+        name="email-notification"
+        checked={settings.receiveEmailNotifications}
+        onChange={handleEmailNotificationToggle}
+      />
+      <label htmlFor="email-notification">Email Notification</label>
+      {/* STRETCH setup browser notifications */}
+      <Typography mb={2}>Activate Browser Notifications</Typography>
+
+      <Typography mt={8} mb={2} variant="h4" component="h3">
+        Followed Artists
+      </Typography>
+
+      {followedArtists.map(artistListItem => (
+        <Typography className="setting-artist-name" mb={2} key={artistListItem.artistName}>
+          {artistListItem.artistName}
+          <UnfollowButton
+            onClick={() => removeArtist({ artistId: artistListItem.artistId, artistName: artistListItem.artistName })}
+          />
+        </Typography>
+      ))}
+
+      {/* TODO add delete account component and hooks */}
+
+    </Paper>
   );
 }

@@ -93,7 +93,6 @@ export default function NavBar({
             variant="h4"
             component="div"
             sx={{ flexGrow: 1, minWidth: 100 }}
-            color='secondary.dark'
             onClick={navigateToFeed}
           >
             Live Wire
