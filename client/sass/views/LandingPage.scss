@@ -19,17 +19,6 @@ $promo-text-full-width: $promo-text-width + $promo-text-padding * 2;
   }
 }
 
-// TODO These need to be protected with specificity
-/*
-h2 {
-  text-align: center;
-}
-
-h4 {
-  text-align: center;
-}
-*/
-
 @media (max-width: 560px) {
   #landing-page {
     position: initial;

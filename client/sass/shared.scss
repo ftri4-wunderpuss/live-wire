@@ -1,4 +1,4 @@
-@import "./config.scss";
+@import "config.scss";
 
 body {
   background-color: lighten(black, 60%);
@@ -12,5 +12,5 @@ body {
 /* Nav Bars */
 #guest-nav-bar,
 #nav-bar {
-  margin-top: 30px;
+  margin-top: $outer-margin;
 }

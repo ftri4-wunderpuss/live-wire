@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import './../sass/containers/Feed.scss';
 
+import Stack from '@mui/material/Stack';
+
 import NavBar from './../views/NavBar.jsx';
 import EventFilters from './../views/EventFilters.jsx';
 import NoEvents from './../views/NoEvents.jsx';
@@ -111,27 +113,32 @@ export default function Feed({
       />
       {events === undefined && <Splash />}
       {events &&
-        (
-          events.length === 0
-            ? <NoEvents />
-            : toRenderEventList.map(eventInfo => {
-              const artistLineup = eventInfo.artists.map(artistItem => artistItem.artistName).join(', ');
+        <Stack
+          direction="column"
+          spacing={3}
+        >
+          {
+            events.length === 0
+              ? <NoEvents />
+              : toRenderEventList.map(eventInfo => {
+                const artistLineup = eventInfo.artists.map(artistItem => artistItem.artistName).join(', ');
 
-              return <Event
-                key={artistLineup + eventInfo.venue}
-                hasMultipleArtist={eventInfo.artists.length > 1}
-                artistId={eventInfo.artists[0].artistId}
-                artistName={artistLineup}
-                eventImageUrl={eventInfo.eventImageUrl}
-                venue={eventInfo.venue}
-                date={eventInfo.date}
-                ticketPrice={eventInfo.ticketPrice.toFixed(2)}
-                isStarred={eventInfo.isStarred}
-                removeArtist={removeArtist}
-                toggleIsStarred={() => toggleIsStarred(eventInfo.eventId)}
-              />;
-            })
-        )
+                return <Event
+                  key={artistLineup + eventInfo.venue}
+                  hasMultipleArtist={eventInfo.artists.length > 1}
+                  artistId={eventInfo.artists[0].artistId}
+                  artistName={artistLineup}
+                  eventImageUrl={eventInfo.eventImageUrl}
+                  venue={eventInfo.venue}
+                  date={eventInfo.date}
+                  ticketPrice={eventInfo.ticketPrice.toFixed(2)}
+                  isStarred={eventInfo.isStarred}
+                  removeArtist={removeArtist}
+                  toggleIsStarred={() => toggleIsStarred(eventInfo.eventId)}
+                />;
+              })
+          }
+        </Stack>
       }
     </div>
   );

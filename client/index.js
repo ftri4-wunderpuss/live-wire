@@ -12,7 +12,7 @@ import App from './containers/App.jsx';
 
 const theme = createTheme({
   palette: {
-    mode: 'dark' // STRETCH can be used to switch between light and dark theme
+    mode: 'dark', // STRETCH can be used to switch between light and dark theme
   },
 });
 
