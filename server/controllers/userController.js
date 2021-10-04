@@ -11,7 +11,7 @@ userController.createUser = async (req, res, next) => {
   try {
     const { name, email, password, city, email_notification } = req.body;
     const last_login = new Date();
-    const last_login_ip = req.headers['x-forwarded-for'] || req.ip ;
+    const last_login_ip = req.headers['x-forwarded-for'] || req.ip;
     //TODO add time 
     if (!email || !password) return next('Missing email address or password in userController.createUser');
     // TODO validate user inputs (check that email is correct format, validate name, check that email_notification is a boolean)
@@ -54,7 +54,7 @@ userController.verifyUser = async (req, res, next) => {
   //if email address does exist in the database, compare stored passhash to hashed version of password that was entered. It if doesn't match, redirect user to homepage with error message (frontend?)
   const isCorrectPassword = await bcrypt.compare(password, passhash);
   res.locals.isCorrectPassword = isCorrectPassword;
-  if(isCorrectPassword) {
+  if (isCorrectPassword) {
     res.locals.user = userInfo.rows;
     return next();
   } else {
@@ -66,20 +66,20 @@ userController.verifyUser = async (req, res, next) => {
 /**
  * Middleware: Retrieve user's information: User (name, email), Settings (city, email notifications), followed_artists, and starred_events. If successful, results are stored in res.locals.userObject.
  */
-userController.getUserInfo = async(req, res, next)  {
+userController.getUserInfo = async (req, res, next) => {
   if (!res.locals.user) return next();
-  const { name, email, city, email_notification } = res.locals.user //TODO: console log to confirm the correct way to access these values
+  const { name, email, city, email_notification } = res.locals.user; //TODO: console log to confirm the correct way to access these values
   //const followedArtists = await userModel.getFollowedArtists() (return array)
   //const starredEvents = await userModel.getStarredEvents() (return array)
 
   res.locals.userObject = {
-    user: User, 
-    settings: Settings, 
-    followedArtists: followedArtists, 
+    user: User,
+    settings: Settings,
+    followedArtists: followedArtists,
     starredEvents: starredEvents
-  }
+  };
   return next();
-}
+};
 
 
 module.exports = userController;
