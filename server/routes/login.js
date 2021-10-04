@@ -5,18 +5,16 @@ const userController = require('../controllers/userController.js');
 const sessionController = require('../controllers/sessionController');
 const cookieController = require('../controllers/cookieController');
 
-
-//route for user to create an account
-router.post('/user', 
-  userController.createUser, 
+router.post('/', 
+  userController.verifyUser, 
   userController.getUserInfo,
   sessionController.startSession, 
-  cookieController.setSIDCookie, 
+  cookieController.setSIDCookie,
   (req, res) => {
     if (res.locals.sid) {
       res
         .status(200)
-        .send(res.locals.userObject); // send user info
+        .send(res.locals.userObject);// send user info
     } else {
       res
         .status(401)
@@ -24,8 +22,5 @@ router.post('/user',
     }
   }
 );
-
-// router.get('/logout', sessionController.endSession, (req, res) => {
-// })
 
 module.exports = router;
