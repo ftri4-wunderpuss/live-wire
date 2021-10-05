@@ -17,22 +17,22 @@ userController.createUser = async (req, res, next) => {
     // TODO validate user inputs (check that email is correct format, validate name, check that email_notification is a boolean)
     const passhash = await bcrypt.hash(password, 12);
     // TODO validate the city against out db, or the API
-    const city_id = ``// TODO get city name by id
+    const city_id = ``;// TODO get city name by id
 
     //TODO: add SQL queries to db folder
     // FIX SQL injection error (pass in array of parameters so they are sanitized - pg.query)
     const createUser = `INSERT INTO users(
       name, email, passhash, city, email_notification, last_login, last_login_ip)
       VALUES (${name}, ${email}, ${passhash}, ${city_id}, ${email_notification}, ${last_login}, ${last_login_ip})
-      RETURNING *`
+      RETURNING *`;
     const newUser = await db.query(createUser);
     res.locals.user = newUser.rows;
-    return next()
+    return next();
   } catch (err) {
     next(err);
   }
 
-}
+};
 
 
 /**
@@ -45,12 +45,12 @@ userController.verifyUser = async (req, res, next) => {
   //check if user has entered email and password
   if (!email || !password) return next('Missing email address or password in userController.createUser');
   //set up query to get the stored hashed password for the email address that was entered
-  const getUserInfo = `SELECT * FROM users WHERE email = ${email}`
+  const getUserInfo = `SELECT * FROM users WHERE email = ${email}`;
   const userInfo = await db.query(getUserInfo);
   const { passhash } = userInfo.rows //does this work to access the stored passhash? access based on index, rows is an array
 
   //if email address does not exist in the database, throw error (email or password does not match)
-  if (!passhash) return next('username or password does not match in userController.verifyUser')
+  if (!passhash) return next('username or password does not match in userController.verifyUser');
   //if email address does exist in the database, compare stored passhash to hashed version of password that was entered. It if doesn't match, redirect user to homepage with error message (frontend?)
   const isCorrectPassword = await bcrypt.compare(password, passhash);
   res.locals.isCorrectPassword = isCorrectPassword;
@@ -58,7 +58,7 @@ userController.verifyUser = async (req, res, next) => {
     res.locals.user = userInfo.rows;
     return next();
   } else {
-    return next()
+    return next();
   }
 }
 
