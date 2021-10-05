@@ -1,0 +1,27 @@
+@import "./../config.scss";
+
+$promo-text-width: 460px;
+$promo-text-padding: 50px;
+$promo-text-full-width: $promo-text-width + $promo-text-padding * 2;
+
+#landing-page {
+  position: absolute;
+  top: 40%;
+  left: calc(50% - ($promo-text-full-width / 2));
+
+  display: flex;
+  justify-content: center;
+
+  #promo-text {
+    flex-grow: 1;
+    max-width: $promo-text-width;
+    padding: $promo-text-padding;
+  }
+}
+
+@media (max-width: 560px) {
+  #landing-page {
+    position: initial;
+    margin-top: 140px;
+  }
+}
