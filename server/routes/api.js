@@ -4,7 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/userController.js');
 const sessionController = require('../controllers/sessionController');
 const cookieController = require('../controllers/cookieController');
-// const artistController = require('../controllers/artistController');
+const artistController = require('../controllers/artistController');
 const eventController = require('../controllers/eventController');
 
 
@@ -61,10 +61,9 @@ router.delete('/user', sessionController.isLoggedIn, sessionController.removeSes
 // router.get('/logout', sessionController.endSession, (req, res) => {
 // })
 
-// router.get('/artists/:term', artistController.getArtistInfo, )
-
-
-
+router.get('/artists/:term', artistController.getArtistInfo, (req, res) => {
+  res.status(200);
+});
 
 
 router.get('/events',
@@ -75,5 +74,6 @@ eventController.getEvents,
     .json(res.locals.eventData);
 });
 
+router.post('/events/:event_id', eventController.followEvent,)
 
 module.exports = router;

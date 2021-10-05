@@ -1,11 +1,13 @@
 const { Pool } = require ('pg');
 
-const PG_URI = 'postgres://jxdmlpwa:VDXT5tjsvYntixux2GVQ4UVxxRsGANZt@fanny.db.elephantsql.com/jxdmlpwa';
+const PG_URI = '';
 
 const pool = new Pool({
   connectionString: PG_URI,
   max: 5
 });
+
+//get api key from https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
 
 /* Query to delete database model
 
