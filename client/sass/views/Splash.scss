@@ -1,5 +1,11 @@
+@import "./../config.scss";
+
 .splash {
   display: flex;
   justify-content: center;
   margin-top: 30px;
+}
+
+.splashElement {
+  max-width: $app-max-width;
 }
