@@ -90,6 +90,7 @@ export default function LoginModal({
             />
             {!isEmailValid && <FormHelperText id="email-error-text">Invalid email</FormHelperText>}
           </FormControl>
+
           <FormControl variant="standard">
             <InputLabel htmlFor="password-field">Password</InputLabel>
             <Input
@@ -110,6 +111,7 @@ export default function LoginModal({
               }
             />
           </FormControl>
+
         </Stack>
       </DialogContent>
 

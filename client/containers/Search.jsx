@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import './../sass/containers/Search.scss';
 
+import Stack from '@mui/material/Stack';
 import NavBar from './../views/NavBar.jsx';
 import Artist from './../views/Artist.jsx';
 import NoArtist from './../views/NoArtist.jsx';
@@ -50,23 +51,28 @@ export default function Search({
         openLogoutModal={openLogoutModal}
       />
       {artists === undefined && <Splash />}
-      {artists && (
-        artists.length === 0
-          ? <NoArtist />
-          : artists.map(artistInfo =>
-            <Artist
-              key={artistInfo.artistName}
-              artistId={artistInfo.artistId}
-              artistName={artistInfo.artistName}
-              artistBio={artistInfo.artistBio}
-              artistImageURL={artistInfo.artistImageURL}
-              artistIsOnTour={artistInfo.artistIsOnTour}
-              isFollowed={followedArtists.find(fA => fA.artistId === artistInfo.artistId) !== undefined}
-              addArtist={addArtist}
-              removeArtist={removeArtist}
-            ></Artist>
-          )
-      )
+      {artists && <Stack
+        direction="column"
+        spacing={3}
+        mt={3}
+      > {
+          artists.length === 0
+            ? <NoArtist />
+            : artists.map(artistInfo =>
+              <Artist
+                key={artistInfo.artistName}
+                artistId={artistInfo.artistId}
+                artistName={artistInfo.artistName}
+                artistBio={artistInfo.artistBio}
+                artistImageUrl={artistInfo.artistImageUrl}
+                artistIsOnTour={artistInfo.artistIsOnTour}
+                isFollowed={followedArtists.find(fA => fA.artistId === artistInfo.artistId) !== undefined}
+                addArtist={addArtist}
+                removeArtist={removeArtist}
+              ></Artist>
+            )
+        }
+      </Stack>
       }
     </div>
   );
