@@ -14,7 +14,7 @@ router.post('/',
     if (res.locals.sid) {
       res
         .status(200)
-        .send(res.locals.userObject);// send user info
+        .json(res.locals.userObject);// send user info
     } else {
       res
         .status(401)

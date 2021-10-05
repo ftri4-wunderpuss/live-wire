@@ -1,4 +1,7 @@
-const db = require('../models/userModel'); //make sure this name matches the database name
+const db = require('../models/userModel');
+let date;
+date = new Date();
+date = date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds();
 const sessionController = {};
 
 
@@ -28,16 +31,29 @@ sessionController.startSession = async (req, res, next) => {
   //if no user_id was stored, return next()
   if (!res.locals.user) return next();
   
-  const { user_id } = res.locals.user._id; //TODO: console log res.locals.user to determine how to access user _id
-  const createSession = `INSERT INTO sessions(user_id)
-  VALUES(${user_id})
+  const user_id = res.locals.user._id; //TODO: console log res.locals.user to determine how to access user _id
+  const expires_at = date;
+  const createSession = `INSERT INTO sessions(user_id, expires_at)
+  VALUES(${user_id}, '${expires_at}')
   RETURNING _id`;
   const sid = await db.query(createSession);
-
+  res.locals.session = {
+    sid: sid,
+    expires_at: expires_at
+  };
   res.locals.sid = sid;
   return next();
 };
 
+sessionController.removeSession = async (req, res, next) => {
+  if (!res.locals.isLoggedIn) return next();
+  //QUESTION: will/can user__id be part of request object
+  //TODO: add deleteSession function to models file (Fix sql injection problem)
+  const { user_id } = req.body._id;
+  const deleteSession = `DELETE FROM sessions WHERE user_id = ${user_id}`;
+  await db.query(deleteSession);
+  return next();
+};
 
 sessionController.endSession = async (req, res, next) => {
   //TODO: add logout functionality here

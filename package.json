@@ -62,6 +62,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@mapbox/node-pre-gyp": "^1.0.0-alpha3",
     "@mui/icons-material": "^5.0.1",
     "@mui/lab": "^5.0.0-alpha.49",
     "@mui/material": "^5.0.2",
@@ -69,7 +70,8 @@
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.1",
+    "mapbox": "^1.0.0-beta10",
+    "node-fetch": "^2.6.5",
     "normalize.css": "^8.0.1",
     "pg": "^8.7.1",
     "react": "^17.0.2",
