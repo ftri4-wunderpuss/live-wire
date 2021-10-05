@@ -50,76 +50,79 @@ export default function LoginModal({
   const isEmailValid = email.length === 0 || isValidEmail(email);
 
   return (
-    <div>
-      <Dialog
-        fullScreen={fullScreen}
-        open={isOpen}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          Login
-        </DialogTitle>
-        <DialogContent>
+    <Dialog
+      fullScreen={fullScreen}
+      open={isOpen}
+      aria-labelledby="responsive-dialog-title"
+      fullWidth
+      maxWidth='xs'
+    >
+      <DialogTitle id="responsive-dialog-title">
+        Login
+      </DialogTitle>
+      <DialogContent>
 
-          {errorMessage.length > 0 &&
-            <DialogContentText
-              sx={{ color: 'error.main' }}
-            >{errorMessage}</DialogContentText>}
+        {errorMessage.length > 0 &&
+          <DialogContentText
+            sx={{ color: 'error.main' }}
+          >{errorMessage}</DialogContentText>}
 
-          <Stack
-            component="form"
-            noValidate
-            autoComplete="off"
-            sx={{
-              width: 300,
-            }}
-            spacing={2}
+        <Stack
+          component="form"
+          noValidate
+          autoComplete="off"
+          sx={{
+            maxWidth: 360,
+          }}
+          spacing={2}
+        >
+          <FormControl
+            error={!isEmailValid}
+            variant="standard"
           >
-            <FormControl
-              error={!isEmailValid}
-              variant="standard"
-            >
-              <InputLabel htmlFor="email-field">Email</InputLabel>
-              <Input
-                id="email-field"
-                value={email}
-                onChange={onEmailChange}
-                aria-describedby="email-error-text"
-              />
-              {!isEmailValid && <FormHelperText id="email-error-text">Invalid email</FormHelperText>}
-            </FormControl>
-            <FormControl variant="standard">
-              <InputLabel htmlFor="password-field">Password</InputLabel>
-              <Input
-                id="password-field"
-                variant="standard"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={onPasswordChange}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-          </Stack>
-        </DialogContent>
+            <InputLabel htmlFor="email-field">Email</InputLabel>
+            <Input
+              autoFocus
+              id="email-field"
+              aria-describedby="email-error-text"
+              value={email}
+              onChange={onEmailChange}
+            />
+            {!isEmailValid && <FormHelperText id="email-error-text">Invalid email</FormHelperText>}
+          </FormControl>
 
-        <DialogActions>
-          <Button onClick={handleSubmission}>
-            Login
-          </Button>
-          <Button onClick={closeModal}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          <FormControl variant="standard">
+            <InputLabel htmlFor="password-field">Password</InputLabel>
+            <Input
+              id="password-field"
+              variant="standard"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={onPasswordChange}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleSubmission}>
+          Login
+        </Button>
+        <Button onClick={closeModal}>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }

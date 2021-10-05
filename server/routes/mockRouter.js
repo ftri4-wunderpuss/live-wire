@@ -8,10 +8,12 @@ const fetch = require('node-fetch');
 // MOCK CONFIG
 const ALLOW_LOGIN = true;
 const VALID_SESSION = true;
+const LAG_RESPONSE = true;
 
 
 // USER SYSTEM
 const loginRouter = Router();
+const logoutRouter = Router();
 const userRouter = Router();
 
 let userCache = {};
@@ -37,6 +39,7 @@ loginRouter.post('/',
     };
     followedArtistsCache = [
       { artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: 'Drake White' },
+      { artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: 'Jared Drake Bell' },
     ];
     starredEventsCache = ["vvG1bZpmT72SPV"];
 
@@ -46,6 +49,13 @@ loginRouter.post('/',
       followedArtists: followedArtistsCache,
       starredEvents: starredEventsCache,
     });
+  }
+);
+
+//  logout 
+logoutRouter.post('/',
+  (req, res) => {
+    return removeSession(res, 200).json({});
   }
 );
 
@@ -79,16 +89,18 @@ userRouter.post('/',
 );
 
 userRouter.patch('/',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
 
+    if (LAG_RESPONSE) await delay(1000);
+
     if (req.body.name) userCache.name = req.body.name;
     if (req.body.email) userCache.email = req.body.email;
     if (req.body.password) userCache.password = req.body.password;
-    if (req.body.city) userCache.city = req.body.city;
-    if (req.body.receiveEmailNotifications) userCache.receiveEmailNotifications = req.body.receiveEmailNotifications;
+    if (req.body.city) settingCache.city = req.body.city;
+    if (req.body.receiveEmailNotifications !== undefined) settingCache.receiveEmailNotifications = req.body.receiveEmailNotifications;
 
     return res.json({
       user: userCache,
@@ -98,10 +110,12 @@ userRouter.patch('/',
 );
 
 userRouter.delete('/',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     userCache = {};
     settingCache = {};
@@ -116,51 +130,57 @@ userRouter.delete('/',
 const eventsRouter = Router();
 
 eventsRouter.get("/",
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
 
-    res.json([
-      {
-        eventId: "vvG1fZpRZbsSL5",
-        eventUrl: "https://www.ticketmaster.com/drake-white-indianapolis-indiana-11-12-2021/event/05005AF018C737CB",
-        artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        venue: "8 Seconds Saloon, Indianapolis",
-        date: "2021-11-13T01:45:00Z",
-        ticketPrice: 20,
-      },
-      {
-        eventId: "vv1AaZA-fGkdJH499",
-        eventUrl: "https://www.ticketmaster.com/drake-bell-montclair-california-10-07-2021/event/09005854E6F155D7",
-        artists: [{ artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: "Drake Bell" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
-        venue: "The Canyon Montclair, Montclair",
-        date: "2021-10-08T03:00:00Z",
-        ticketPrice: 40,
-      },
-      {
-        eventId: "vvG1bZpmT72SPV",
-        eventUrl: "https://www.ticketmaster.com/drake-white-saint-louis-missouri-10-08-2021/event/06005AEFC43F3974",
-        artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
-        // 640 x 360 p
-        eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        venue: "Delmar Hall, Saint Louis",
-        date: "2021-10-09T01:00:00Z",
-        ticketPrice: 25,
-      },
-    ]);
+    if (LAG_RESPONSE) await delay(1000);
+
+    return res.json({
+      events: [
+        {
+          eventId: "vvG1fZpRZbsSL5",
+          eventUrl: "https://www.ticketmaster.com/drake-white-indianapolis-indiana-11-12-2021/event/05005AF018C737CB",
+          artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          venue: "8 Seconds Saloon, Indianapolis",
+          date: "2021-11-13T01:45:00Z",
+          ticketPrice: 20,
+        },
+        {
+          eventId: "vv1AaZA-fGkdJH499",
+          eventUrl: "https://www.ticketmaster.com/drake-bell-montclair-california-10-07-2021/event/09005854E6F155D7",
+          artists: [{ artistId: "094f10e7-27d5-400d-a145-331013e67229", artistName: "Drake Bell" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
+          venue: "The Canyon Montclair, Montclair",
+          date: "2021-10-08T03:00:00Z",
+          ticketPrice: 40,
+        },
+        {
+          eventId: "vvG1bZpmT72SPV",
+          eventUrl: "https://www.ticketmaster.com/drake-white-saint-louis-missouri-10-08-2021/event/06005AEFC43F3974",
+          artists: [{ artistId: "3450511f-aea9-40cd-9618-d26ca7495842", artistName: "Drake White" }],
+          // 640 x 360 p
+          eventImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          venue: "Delmar Hall, Saint Louis",
+          date: "2021-10-09T01:00:00Z",
+          ticketPrice: 25,
+        },
+      ]
+    });
   }
 );
 
 eventsRouter.post('/:event_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const eventId = req.params.event_id;
     if (!starredEventsCache.find(e => e === eventId)) starredEventsCache.push(eventId);
@@ -172,10 +192,12 @@ eventsRouter.post('/:event_id',
 );
 
 eventsRouter.delete('/:event_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const eventId = req.params.event_id;
     const index = starredEventsCache.findIndex(e => e === eventId);
@@ -191,27 +213,31 @@ eventsRouter.delete('/:event_id',
 const artistsRouter = Router();
 
 artistsRouter.get('/:term',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
 
-    res.json([
-      {
-        artistId: "3450511f-aea9-40cd-9618-d26ca7495842",
-        artistName: "Drake White",
-        artistBio: "William Drake White (born October 3, 1983) is an American country music singer.",
-        artistImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
-        isOnTour: true,
-      },
-      {
-        artistId: "094f10e7-27d5-400d-a145-331013e67229",
-        artistName: "Jared Drake Bell",
-        artistBio: "Jared Drake Bell (born June 27, 1986), also known as Drake Campana, is an American actor, singer, songwriter, and musician. Born in Newport Beach, California, he began his career as an actor in the early 1990s at the age of five with his first televised appearance on Home Improvement, and also appeared in several commercials as a child. Bell is best known for his starring roles on Nickelodeon's The Amanda Show and Drake & Josh. He also starred in a trilogy of The Fairly OddParents movies on Nickelodeon. Bell was the voice of Peter Parker / Spider-Man in the animated series Ultimate Spider-Man on Disney XD.",
-        artistImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
-        isOnTour: true,
-      }
-    ]);
+    if (LAG_RESPONSE) await delay(1000);
+
+    res.json({
+      artists: [
+        {
+          artistId: "3450511f-aea9-40cd-9618-d26ca7495842",
+          artistName: "Drake White",
+          artistBio: "William Drake White (born October 3, 1983) is an American country music singer.",
+          artistImageUrl: "https://s1.ticketm.net/dam/a/837/1ef20cf3-1732-4d64-a97f-c0cddd059837_970401_RETINA_PORTRAIT_16_9.jpg",
+          isOnTour: true,
+        },
+        {
+          artistId: "094f10e7-27d5-400d-a145-331013e67229",
+          artistName: "Jared Drake Bell",
+          artistBio: "Jared Drake Bell (born June 27, 1986), also known as Drake Campana, is an American actor, singer, songwriter, and musician. Born in Newport Beach, California, he began his career as an actor in the early 1990s at the age of five with his first televised appearance on Home Improvement, and also appeared in several commercials as a child. Bell is best known for his starring roles on Nickelodeon's The Amanda Show and Drake & Josh. He also starred in a trilogy of The Fairly OddParents movies on Nickelodeon. Bell was the voice of Peter Parker / Spider-Man in the animated series Ultimate Spider-Man on Disney XD.",
+          artistImageUrl: "https://s1.ticketm.net/dam/a/e02/5525c2b6-5de2-4eed-ae08-fa7ed0035e02_1235631_RETINA_PORTRAIT_16_9.jpg",
+          isOnTour: true,
+        }
+      ]
+    });
   }
 );
 
@@ -220,6 +246,8 @@ artistsRouter.post('/:artist_id',
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const artistId = req.params.artist_id;
 
@@ -244,10 +272,12 @@ artistsRouter.post('/:artist_id',
 );
 
 artistsRouter.delete('/:artist_id',
-  (req, res) => {
+  async (req, res) => {
     if (!VALID_SESSION) return removeSession(res).json({
       error: 'Unauthorized access.'
     });
+
+    if (LAG_RESPONSE) await delay(1000);
 
     const artistId = req.params.artist_id;
     const index = followedArtistsCache.findIndex(e => e.artistId === artistId);
@@ -263,6 +293,7 @@ artistsRouter.delete('/:artist_id',
 const router = Router();
 
 router.use('/login', loginRouter);
+router.use('/logout', logoutRouter);
 router.use('/api/user', userRouter);
 router.use('/api/events', eventsRouter);
 router.use('/api/artists', artistsRouter);
@@ -275,6 +306,12 @@ function removeSession(res, status = 401) {
     { httpOnly: true, sameSite: 'lax', expires: new Date(Date.now() - 1000) }
   );
   return res.status(status);
+}
+
+function delay(ms) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), ms);
+  });
 }
 
 module.exports = router;

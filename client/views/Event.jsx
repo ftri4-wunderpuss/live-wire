@@ -2,10 +2,18 @@ import React from 'react';
 
 import './../sass/views/Event.scss';
 
+import { useTheme } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 import UnfollowButton from './UnfollowButton.jsx';
+import Star from './Star.jsx';
 
 export default function Event({
   hasMultipleArtist,
+  artistId,
   artistName,
   eventImageUrl,
   venue,
@@ -15,30 +23,33 @@ export default function Event({
   removeArtist,
   toggleIsStarred
 }) {
+  const theme = useTheme();
+
+  // TODO useCallback for unfollow onClick
+
   return (
-    <article className='event-item'>
-      <div className='event-star' onClick={toggleIsStarred}>
-        <span className={isStarred ? 'active-star' : ''}>&#9733;</span>
-      </div>
-      <header>
-        <img
-          src={eventImageUrl}
-          alt={`Event image for ${artistName}'s upcoming event.`}
-        />
-      </header>
-      <div className='event-body'>
-        <ul>
-          <li>Artist: {artistName}</li>
-          <li>Venue: {venue}</li>
-          <li>Date & Time: {date.toLocaleString()}</li>
-          <li>Ticket Price: {ticketPrice} USD</li>
-        </ul>
-      </div>
+    <Card
+      className='event-item'
+      elevation={4}
+    >
+      <Star isStarred={isStarred} toggleIsStarred={toggleIsStarred} />
+      <CardMedia
+        component="img"
+        height="360"
+        image={eventImageUrl}
+        alt={`Event image for ${artistName}'s upcoming event.`}
+      />
+      <CardContent className='event-body'>
+        <Typography><span style={{ color: theme.palette.secondary.dark }}>Artist:</span> {artistName}</Typography>
+        <Typography><span style={{ color: theme.palette.secondary.dark }}>Venue:</span> {venue}</Typography>
+        <Typography><span style={{ color: theme.palette.secondary.dark }}>Date & Time:</span> {date.toLocaleDateString()}</Typography>
+        <Typography><span style={{ color: theme.palette.secondary.dark }}>Ticket Price:</span> {ticketPrice} USD</Typography >
+      </CardContent>
       {!hasMultipleArtist &&
-        <div className='event-footer'>
-          <UnfollowButton onClick={removeArtist} />
-        </div>
+        <CardActions className='event-footer' sx={{ justifyContent: 'flex-end' }}>
+          <UnfollowButton onClick={() => removeArtist({ artistId, artistName })} />
+        </CardActions>
       }
-    </article>
+    </Card>
   );
 }
